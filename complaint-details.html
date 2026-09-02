@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complaint Details — CampusVoice</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand">
+        <div class="brand-logo">🎓</div>
+        <div>
+          <span class="brand-text">CampusVoice</span>
+          <span class="brand-tagline">Grievance Portal</span>
+        </div>
+      </a>
+
+      <div class="nav-menu" id="nav-links">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="submit.html" class="nav-link">Submit Complaint</a>
+        <a href="complaints.html" class="nav-link">My Complaints</a>
+      </div>
+
+      <div class="nav-actions">
+        <div id="nav-user-info" class="nav-user-info"></div>
+        <button id="nav-logout-btn" class="btn btn-sm btn-outline">Logout</button>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container" style="max-width: 900px;">
+
+      <!-- Top Navigation Link -->
+      <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <a href="javascript:history.back()" style="font-size: 0.9rem; color: var(--text-muted);">&larr; Back</a>
+        <a href="complaints.html" class="btn btn-sm btn-secondary">All Complaints</a>
+      </div>
+
+      <!-- Error State (If ID invalid) -->
+      <div id="complaint-not-found" class="card empty-state" style="display: none;">
+        <div class="empty-state-icon">⚠️</div>
+        <h2 class="empty-state-title">Complaint Not Found</h2>
+        <p id="not-found-message" style="margin-bottom: 20px;">The requested complaint could not be located in the system.</p>
+        <a href="complaints.html" class="btn btn-primary">Return to Complaints</a>
+      </div>
+
+      <!-- Main Complaint Details Container -->
+      <div id="complaint-details-container">
+
+        <!-- Header Card -->
+        <div class="card" style="border-top: 4px solid var(--primary-700);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+            <div>
+              <span id="detail-id" class="table-code" style="font-size: 1.1rem; padding: 2px 8px; background: var(--primary-50); border-radius: 4px;">
+                CMP-....
+              </span>
+              <h1 id="detail-title" style="font-size: 1.6rem; font-weight: 800; color: var(--primary-900); margin-top: 8px;">
+                Loading...
+              </h1>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span id="detail-priority-badge"></span>
+              <span id="detail-status-badge"></span>
+            </div>
+          </div>
+
+          <!-- Metadata Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; background: #f8fafc; padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-top: 14px; font-size: 0.88rem;">
+            <div>
+              <span style="color: var(--text-muted); display: block; font-size: 0.78rem; text-transform: uppercase;">Submitted By</span>
+              <strong id="detail-student-name">—</strong>
+              <div id="detail-student-email" style="color: var(--text-muted); font-size: 0.8rem;">—</div>
+            </div>
+
+            <div>
+              <span style="color: var(--text-muted); display: block; font-size: 0.78rem; text-transform: uppercase;">Category &amp; Dept</span>
+              <strong id="detail-category">—</strong>
+              <div id="detail-department" style="color: var(--text-muted); font-size: 0.8rem;">—</div>
+            </div>
+
+            <div>
+              <span style="color: var(--text-muted); display: block; font-size: 0.78rem; text-transform: uppercase;">Location</span>
+              <strong id="detail-location">—</strong>
+            </div>
+
+            <div>
+              <span style="color: var(--text-muted); display: block; font-size: 0.78rem; text-transform: uppercase;">Timeline Dates</span>
+              <div>Filed: <span id="detail-created-at">—</span></div>
+              <div style="color: var(--text-muted); font-size: 0.8rem;">Updated: <span id="detail-updated-at">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description Card -->
+        <div class="card">
+          <h2 class="card-title" style="font-size: 1.15rem; margin-bottom: 12px;">Grievance Description</h2>
+          <div id="detail-description" style="line-height: 1.7; color: var(--text-main); white-space: pre-line;">
+            —
+          </div>
+        </div>
+
+        <!-- Lifecycle Status Timeline Card -->
+        <div class="card">
+          <h2 class="card-title" style="font-size: 1.15rem; margin-bottom: 8px;">Resolution Progress Tracker</h2>
+          <p class="card-subtitle">Real-time status milestones from ticket submission to completion.</p>
+
+          <div id="status-timeline" class="timeline">
+            <!-- Timeline dynamically rendered by complaint-details.js -->
+          </div>
+        </div>
+
+        <!-- Official Administrative Response Card -->
+        <div class="card" style="border-left: 4px solid var(--primary-600);">
+          <h2 class="card-title" style="font-size: 1.15rem; margin-bottom: 8px;">Official Administration Remarks</h2>
+          <div id="admin-response-content" style="background: var(--primary-50); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--primary-100); color: var(--primary-900); font-size: 0.95rem; line-height: 1.6; display: none;">
+          </div>
+          <div id="admin-response-empty" style="color: var(--text-muted); font-size: 0.92rem; font-style: italic; padding: 10px 0;">
+            ⏳ No administrative remarks have been published yet. The department is reviewing this ticket.
+          </div>
+        </div>
+
+        <!-- Admin-Only Status Action Panel (visible only when logged in as Admin) -->
+        <div id="admin-action-card" class="card" style="display: none; background: #faf5ff; border: 1px solid #d8b4fe;">
+          <div class="card-header" style="border-color: #e9d5ff;">
+            <div>
+              <h2 class="card-title" style="color: #6b21a8; font-size: 1.15rem;">⚡ Administrative Action Panel</h2>
+              <p class="card-subtitle">As an authorized administrator, you can update this ticket's status and publish response remarks.</p>
+            </div>
+            <span class="badge badge-admin">ADMIN ONLY</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="admin-status-select">Update Lifecycle Status</label>
+              <select id="admin-status-select" class="form-control">
+                <option value="Pending">Pending (Orange)</option>
+                <option value="In Progress">In Progress (Blue)</option>
+                <option value="Resolved">Resolved (Green)</option>
+                <option value="Rejected">Rejected (Red)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="admin-remarks-input">Official Resolution / Action Remarks</label>
+            <textarea 
+              id="admin-remarks-input" 
+              class="form-control" 
+              rows="3" 
+              placeholder="Enter work order number, technician assigned, action taken, or explanation for student..."
+            ></textarea>
+          </div>
+
+          <button id="btn-save-admin-update" class="btn btn-primary">
+            Save Status &amp; Update Remarks
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CampusVoice — College Grievance &amp; Complaint Redressal System.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/complaint-details.js"></script>
+</body>
+</html>

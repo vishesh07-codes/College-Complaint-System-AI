@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Control Panel — CampusVoice</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="admin.html" class="brand">
+        <div class="brand-logo" style="background: linear-gradient(135deg, #4338ca, #6366f1);">🏛️</div>
+        <div>
+          <span class="brand-text">CampusVoice</span>
+          <span class="brand-tagline">Admin Control Panel</span>
+        </div>
+      </a>
+
+      <div class="nav-menu" id="nav-links">
+        <a href="admin.html" class="nav-link active">Admin Portal</a>
+        <a href="dashboard.html" class="nav-link">Student View</a>
+      </div>
+
+      <div class="nav-actions">
+        <div id="nav-user-info" class="nav-user-info"></div>
+        <button id="nav-logout-btn" class="btn btn-sm btn-outline">Logout</button>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Header & Reset Action -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+        <div>
+          <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary-900);">
+            Campus Grievance Management
+          </h1>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Logged in as <strong id="admin-greeting-name">Administrator</strong> &bull; Oversee all student tickets and update resolution progress.
+          </p>
+        </div>
+        <div>
+          <button id="btn-reset-demo-data" class="btn btn-sm btn-secondary" title="Revert all tickets back to initial 5 seed records">
+            🔄 Reset Demo Seed Data
+          </button>
+        </div>
+      </div>
+
+      <!-- Campus Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-info">
+            <span class="stat-label">Total Tickets</span>
+            <span class="stat-value" id="admin-stat-total">0</span>
+          </div>
+          <div class="stat-icon blue">📊</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-info">
+            <span class="stat-label">Pending Review</span>
+            <span class="stat-value" id="admin-stat-pending" style="color: var(--status-pending-text);">0</span>
+          </div>
+          <div class="stat-icon orange">⏳</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-info">
+            <span class="stat-label">In Progress</span>
+            <span class="stat-value" id="admin-stat-progress" style="color: var(--status-progress-text);">0</span>
+          </div>
+          <div class="stat-icon blue">🔄</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-info">
+            <span class="stat-label">Resolved</span>
+            <span class="stat-value" id="admin-stat-resolved" style="color: var(--status-resolved-text);">0</span>
+          </div>
+          <div class="stat-icon green">✅</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-info">
+            <span class="stat-label">Urgent / High</span>
+            <span class="stat-value" id="admin-stat-urgent" style="color: var(--priority-urgent);">0</span>
+          </div>
+          <div class="stat-icon red">🚨</div>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="search-input-group">
+          <input 
+            type="text" 
+            id="admin-search-input" 
+            class="form-control" 
+            placeholder="🔍 Search student name, ID, title, department, location..."
+          >
+        </div>
+
+        <select id="admin-filter-category" class="filter-select">
+          <option value="">All Categories</option>
+        </select>
+
+        <select id="admin-filter-status" class="filter-select">
+          <option value="">All Statuses</option>
+          <option value="Pending">Pending (Orange)</option>
+          <option value="In Progress">In Progress (Blue)</option>
+          <option value="Resolved">Resolved (Green)</option>
+          <option value="Rejected">Rejected (Red)</option>
+        </select>
+
+        <select id="admin-filter-priority" class="filter-select">
+          <option value="">All Priorities</option>
+          <option value="Urgent">Urgent</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+
+        <button id="btn-admin-clear-filters" class="btn btn-sm btn-secondary">
+          Clear
+        </button>
+      </div>
+
+      <!-- Complaints Management Table -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">All Campus Grievances</h2>
+            <p class="card-subtitle">Click "Update" to change status and attach resolution remarks.</p>
+          </div>
+          <span id="admin-count-badge" class="badge badge-admin" style="font-size: 0.82rem;">
+            Loading tickets...
+          </span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Ticket ID</th>
+                <th>Student &amp; Dept</th>
+                <th>Complaint Title</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Date Filed</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-table-body">
+              <!-- Dynamically populated via admin.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="admin-empty-state" class="empty-state" style="display: none;">
+          <div class="empty-state-icon">📋</div>
+          <div class="empty-state-title">No grievances found</div>
+          <p>No complaints matched your search filter criteria.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Quick Status Update Modal -->
+  <div id="status-modal-backdrop" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Update Grievance Status</h3>
+        <button id="modal-close-btn" class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div style="background: #f8fafc; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 18px;">
+          <span id="modal-complaint-id" class="table-code" style="font-size: 0.95rem;">CMP-....</span>
+          <div id="modal-complaint-title" style="font-weight: 700; color: var(--primary-900); margin-top: 4px;">—</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="modal-status-select">Status</label>
+          <select id="modal-status-select" class="form-control">
+            <option value="Pending">Pending (Orange)</option>
+            <option value="In Progress">In Progress (Blue)</option>
+            <option value="Resolved">Resolved (Green)</option>
+            <option value="Rejected">Rejected (Red)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="modal-response-textarea">Admin Response / Action Remarks</label>
+          <textarea 
+            id="modal-response-textarea" 
+            class="form-control" 
+            rows="4" 
+            placeholder="Describe action taken, assignees, work order number, or resolution summary..."
+          ></textarea>
+          <span class="form-hint">This response will be visible to the student on their details page.</span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button id="modal-cancel-btn" class="btn btn-secondary">Cancel</button>
+        <button id="modal-save-btn" class="btn btn-primary">Save Changes &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CampusVoice — College Grievance &amp; Complaint Redressal System.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

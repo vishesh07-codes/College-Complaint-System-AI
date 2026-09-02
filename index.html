@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Grievance Redressal & Complaint Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-logo">🎓</div>
+        <div>
+          <span class="brand-text">CampusVoice</span>
+          <span class="brand-tagline">College Grievance Portal</span>
+        </div>
+      </a>
+
+      <div class="nav-menu" id="nav-links">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="dashboard.html" class="nav-link">Student Portal</a>
+        <a href="admin.html" class="nav-link">Admin Portal</a>
+      </div>
+
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-primary btn-sm">Login &rarr;</a>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="container">
+      <span class="hero-tag">Official Student Support System</span>
+      <h1 class="hero-title">Your Voice Matters on Campus</h1>
+      <p class="hero-subtitle">
+        A transparent, fast, and accountable grievance redressal system. Submit complaints regarding academics, hostels, campus IT, infrastructure, and track real-time resolution from college authorities.
+      </p>
+      <div class="hero-cta">
+        <a href="login.html" class="btn btn-primary btn-lg" style="background-color: #ffffff; color: var(--primary-800); border-color: #ffffff;">
+          File a Complaint Now
+        </a>
+        <a href="login.html" class="btn btn-outline btn-lg" style="color: #ffffff; border-color: rgba(255,255,255,0.5);">
+          Administrative Portal
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Information & Features -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- How it Works / Core Pillars -->
+      <div class="features-grid">
+        <div class="feature-box">
+          <div class="feature-icon">📝</div>
+          <h3 class="feature-title">1. Easy Online Submission</h3>
+          <p class="feature-text">
+            Submit issues related to Wi-Fi, classroom equipment, hostels, canteen, or sanitation in under two minutes with category tagging and priority indicators.
+          </p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">🔄</div>
+          <h3 class="feature-title">2. Live Status Tracking</h3>
+          <p class="feature-text">
+            Track your complaint lifecycle from <strong>Pending</strong> to <strong>In Progress</strong> and <strong>Resolved</strong> with clear visual progress timelines.
+          </p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-icon">🛡️</div>
+          <h3 class="feature-title">3. Admin Accountability</h3>
+          <p class="feature-text">
+            Campus department heads and deans review complaints, assign maintenance personnel, and communicate official action notes directly to students.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Role Access Cards -->
+      <div class="card" style="border-left: 4px solid var(--primary-600); margin-top: 40px;">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Demo User Roles &amp; Credentials</h2>
+            <p class="card-subtitle">Test both student and administrator workflows with preloaded sample data.</p>
+          </div>
+        </div>
+        <div class="form-row" style="margin-top: 10px;">
+          <div style="background: #f8fafc; padding: 18px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <h4 style="color: var(--primary-800); margin-bottom: 8px;">👨‍🎓 Student Role</h4>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">
+              Can submit complaints, track progress, and review responses on their submitted tickets.
+            </p>
+            <div style="font-size: 0.85rem; font-family: monospace; background: #ffffff; padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 14px;">
+              Email: <strong>student@college.com</strong><br>
+              Password: <strong>12345</strong>
+            </div>
+            <a href="login.html" class="btn btn-sm btn-outline btn-block">Login as Student &rarr;</a>
+          </div>
+
+          <div style="background: #f8fafc; padding: 18px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <h4 style="color: var(--primary-800); margin-bottom: 8px;">🏛️ Administrator Role</h4>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">
+              Can view all campus tickets, update statuses, publish resolution notes, and view KPI metrics.
+            </p>
+            <div style="font-size: 0.85rem; font-family: monospace; background: #ffffff; padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 14px;">
+              Email: <strong>admin@college.com</strong><br>
+              Password: <strong>admin123</strong>
+            </div>
+            <a href="login.html" class="btn btn-sm btn-primary btn-block">Login as Admin &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CampusVoice — College Grievance & Complaint Redressal System. Built with HTML, CSS &amp; Vanilla JavaScript.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

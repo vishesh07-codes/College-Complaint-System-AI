@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Complaint — CampusVoice</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand">
+        <div class="brand-logo">🎓</div>
+        <div>
+          <span class="brand-text">CampusVoice</span>
+          <span class="brand-tagline">Student Portal</span>
+        </div>
+      </a>
+
+      <div class="nav-menu" id="nav-links">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="submit.html" class="nav-link active">Submit Complaint</a>
+        <a href="complaints.html" class="nav-link">My Complaints</a>
+      </div>
+
+      <div class="nav-actions">
+        <div id="nav-user-info" class="nav-user-info"></div>
+        <button id="nav-logout-btn" class="btn btn-sm btn-outline">Logout</button>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container" style="max-width: 800px;">
+
+      <!-- Breadcrumb / Back Link -->
+      <div style="margin-bottom: 18px;">
+        <a href="dashboard.html" style="font-size: 0.9rem; color: var(--text-muted);">&larr; Back to Dashboard</a>
+      </div>
+
+      <!-- Success Notification Banner (shown after submission) -->
+      <div id="submit-success-banner" style="display: none; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: var(--radius-md); padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow-sm);">
+        <div style="display: flex; align-items: flex-start; gap: 14px;">
+          <span style="font-size: 28px;">🎉</span>
+          <div>
+            <h3 style="color: #065f46; font-size: 1.15rem; margin-bottom: 4px;">Grievance Submitted Successfully!</h3>
+            <p style="color: #047857; font-size: 0.92rem; margin-bottom: 12px;">
+              Your ticket has been recorded with ID <strong id="new-complaint-id" class="table-code">CMP-100X</strong> and assigned status <strong>Pending</strong>.
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <a id="new-complaint-link" href="#" class="btn btn-sm btn-primary">View Ticket Details &rarr;</a>
+              <a href="complaints.html" class="btn btn-sm btn-secondary">All My Complaints</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h1 class="card-title" style="font-size: 1.4rem;">File a New Grievance</h1>
+            <p class="card-subtitle">
+              Provide thorough details so campus maintenance and administrators can resolve your issue quickly.
+            </p>
+          </div>
+        </div>
+
+        <form id="complaint-form" novalidate>
+
+          <!-- Student & Department Information -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="studentName">Student Full Name</label>
+              <input type="text" id="studentName" class="form-control" placeholder="Your name">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="department">Academic Department</label>
+              <select id="department" class="form-control">
+                <option value="Computer Science">Computer Science &amp; Engineering</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                <option value="Electronics Engineering">Electronics &amp; Communication</option>
+                <option value="Civil Engineering">Civil Engineering</option>
+                <option value="Business Administration">Business Administration (MBA)</option>
+                <option value="Sciences & Humanities">Sciences &amp; Humanities</option>
+                <option value="Other Department">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Hidden Student Email -->
+          <input type="hidden" id="studentEmail">
+
+          <!-- Category & Priority Row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="category">Grievance Category <span class="required">*</span></label>
+              <select id="category" class="form-control">
+                <option value="">-- Choose Category --</option>
+                <option value="Academic">Academic (Lectures, Labs, Exams)</option>
+                <option value="Infrastructure">Infrastructure (Classrooms, Desks, Fans)</option>
+                <option value="Hostel">Hostel (Rooms, Mess, Electricity)</option>
+                <option value="Library">Library (Books, AC, Study Hall)</option>
+                <option value="Transport">Transport (Bus Routes, Timing)</option>
+                <option value="Canteen">Canteen (Food Quality, Hygiene, RO Water)</option>
+                <option value="IT/Internet">IT / Internet (Wi-Fi, Portal, Systems)</option>
+                <option value="Administration">Administration (Fees, Certificates)</option>
+                <option value="Cleanliness">Cleanliness (Washrooms, Dustbins)</option>
+                <option value="Other">Other</option>
+              </select>
+              <span id="category-error" class="form-error"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="priority">Priority Level</label>
+              <select id="priority" class="form-control">
+                <option value="Low">Low (General suggestion or minor fix)</option>
+                <option value="Medium" selected>Medium (Normal maintenance)</option>
+                <option value="High">High (Impacting classes or living condition)</option>
+                <option value="Urgent">Urgent (Immediate safety / critical breakdown)</option>
+              </select>
+              <span class="form-hint">Please reserve Urgent for emergencies.</span>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="form-group">
+            <label class="form-label" for="location">Exact Campus Location</label>
+            <input 
+              type="text" 
+              id="location" 
+              class="form-control" 
+              placeholder="e.g. Hostel Block B 2nd Floor Room 214, or Main Library 1st Floor"
+            >
+            <span class="form-hint">Helps staff locate the issue without delay.</span>
+          </div>
+
+          <!-- Complaint Title -->
+          <div class="form-group">
+            <label class="form-label" for="title">Complaint Summary / Title <span class="required">*</span></label>
+            <input 
+              type="text" 
+              id="title" 
+              class="form-control" 
+              placeholder="Brief summary of the issue (e.g. Wi-Fi router keeps rebooting in Room 204)"
+            >
+            <span id="title-error" class="form-error"></span>
+          </div>
+
+          <!-- Detailed Description -->
+          <div class="form-group">
+            <label class="form-label" for="description">Detailed Description <span class="required">*</span></label>
+            <textarea 
+              id="description" 
+              class="form-control" 
+              rows="5" 
+              placeholder="Please provide full details of what happened, when it started, and who is affected..."
+            ></textarea>
+            <span id="description-error" class="form-error"></span>
+          </div>
+
+          <!-- Submission Controls -->
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+            <a href="dashboard.html" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary" style="min-width: 180px;">
+              Submit Grievance &rarr;
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CampusVoice — College Grievance &amp; Complaint Redressal System.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/submit.js"></script>
+</body>
+</html>

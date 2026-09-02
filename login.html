@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — College Complaint Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Minimal Nav -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <div class="brand-logo">🎓</div>
+        <div>
+          <span class="brand-text">CampusVoice</span>
+          <span class="brand-tagline">Grievance Portal</span>
+        </div>
+      </a>
+      <div>
+        <a href="index.html" class="btn btn-sm btn-outline">&larr; Back to Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content" style="display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 140px);">
+    <div class="container" style="max-width: 460px;">
+      
+      <div class="card" style="margin-bottom: 0;">
+        <div class="card-header" style="text-align: center; display: block; border-bottom: none; padding-bottom: 0;">
+          <h2 class="card-title" style="font-size: 1.5rem;">Sign In to Portal</h2>
+          <p class="card-subtitle">Access your student grievance dashboard or admin control panel.</p>
+        </div>
+
+        <!-- Inline Error Banner -->
+        <div id="login-error" style="display: none; background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; padding: 12px; border-radius: 6px; font-size: 0.88rem; margin: 16px 0;"></div>
+
+        <form id="login-form" style="margin-top: 20px;">
+          <div class="form-group">
+            <label class="form-label" for="email">Campus Email Address <span class="required">*</span></label>
+            <input 
+              type="email" 
+              id="email" 
+              class="form-control" 
+              placeholder="e.g. student@college.com or admin@college.com" 
+              required
+              autocomplete="username"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Password <span class="required">*</span></label>
+            <input 
+              type="password" 
+              id="password" 
+              class="form-control" 
+              placeholder="Enter your password" 
+              required
+              autocomplete="current-password"
+            >
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 10px;">
+            Sign In &rarr;
+          </button>
+        </form>
+
+        <!-- Demo Accounts Helper Card -->
+        <div style="margin-top: 28px; padding-top: 20px; border-top: 1px dashed var(--border-color);">
+          <span style="display: block; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; text-align: center;">
+            ⚡ Quick Demo 1-Click Login
+          </span>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button type="button" id="btn-demo-student" class="btn btn-outline btn-block" style="justify-content: flex-start; text-align: left; padding: 10px 14px;">
+              <span style="font-size: 1.2rem; margin-right: 6px;">👨‍🎓</span>
+              <div>
+                <strong>Student Demo Login</strong>
+                <div style="font-size: 0.76rem; color: var(--text-muted);">student@college.com &bull; 12345</div>
+              </div>
+            </button>
+
+            <button type="button" id="btn-demo-admin" class="btn btn-secondary btn-block" style="justify-content: flex-start; text-align: left; padding: 10px 14px;">
+              <span style="font-size: 1.2rem; margin-right: 6px;">🏛️</span>
+              <div>
+                <strong>Admin Officer Login</strong>
+                <div style="font-size: 0.76rem; color: var(--text-muted);">admin@college.com &bull; admin123</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CampusVoice — College Grievance & Complaint Redressal System.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

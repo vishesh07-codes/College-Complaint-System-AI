@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard — CampusVoice</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand">
+        <div class="brand-logo">🎓</div>
+        <div>
+          <span class="brand-text">CampusVoice</span>
+          <span class="brand-tagline">Student Portal</span>
+        </div>
+      </a>
+
+      <div class="nav-menu" id="nav-links">
+        <a href="dashboard.html" class="nav-link active">Dashboard</a>
+        <a href="submit.html" class="nav-link">Submit Complaint</a>
+        <a href="complaints.html" class="nav-link">My Complaints</a>
+      </div>
+
+      <div class="nav-actions">
+        <div id="nav-user-info" class="nav-user-info"></div>
+        <button id="nav-logout-btn" class="btn btn-sm btn-outline">Logout</button>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Welcome Banner -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div>
+          <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary-900);">
+            Welcome back, <span id="student-greeting-name">Student</span>! 👋
+          </h1>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Track the status of your submitted grievances or file a new service request.
+          </p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <a href="submit.html" class="btn btn-primary">
+            <span>+</span> File New Complaint
+          </a>
+        </div>
+      </div>
+
+      <!-- Real-time KPI Stat Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-info">
+            <span class="stat-label">Total Filed</span>
+            <span class="stat-value" id="stat-total">0</span>
+          </div>
+          <div class="stat-icon blue">📁</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-info">
+            <span class="stat-label">Pending Review</span>
+            <span class="stat-value" id="stat-pending" style="color: var(--status-pending-text);">0</span>
+          </div>
+          <div class="stat-icon orange">⏳</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-info">
+            <span class="stat-label">In Progress</span>
+            <span class="stat-value" id="stat-in-progress" style="color: var(--status-progress-text);">0</span>
+          </div>
+          <div class="stat-icon blue">🔄</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-info">
+            <span class="stat-label">Resolved</span>
+            <span class="stat-value" id="stat-resolved" style="color: var(--status-resolved-text);">0</span>
+          </div>
+          <div class="stat-icon green">✅</div>
+        </div>
+      </div>
+
+      <!-- Recent Complaints Section -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Recent Complaints &amp; Status</h2>
+            <p class="card-subtitle">Your latest logged tickets and live progress updates.</p>
+          </div>
+          <a href="complaints.html" class="btn btn-sm btn-outline">
+            View All Complaints &rarr;
+          </a>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Ticket ID</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Date Filed</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="recent-complaints-body">
+              <!-- Dynamically populated via dashboard.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State if no complaints -->
+        <div id="empty-recent-state" class="empty-state" style="display: none;">
+          <div class="empty-state-icon">📝</div>
+          <div class="empty-state-title">No complaints submitted yet</div>
+          <p style="margin-bottom: 16px;">Have you faced any issue on campus? Submit your first ticket now.</p>
+          <a href="submit.html" class="btn btn-primary">+ File a Complaint</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CampusVoice — College Grievance &amp; Complaint Redressal System.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

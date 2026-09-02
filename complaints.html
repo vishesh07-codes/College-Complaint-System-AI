@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Complaints — CampusVoice</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="dashboard.html" class="brand">
+        <div class="brand-logo">🎓</div>
+        <div>
+          <span class="brand-text">CampusVoice</span>
+          <span class="brand-tagline">Student Portal</span>
+        </div>
+      </a>
+
+      <div class="nav-menu" id="nav-links">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="submit.html" class="nav-link">Submit Complaint</a>
+        <a href="complaints.html" class="nav-link active">My Complaints</a>
+      </div>
+
+      <div class="nav-actions">
+        <div id="nav-user-info" class="nav-user-info"></div>
+        <button id="nav-logout-btn" class="btn btn-sm btn-outline">Logout</button>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Header & Action -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+        <div>
+          <h1 style="font-size: 1.8rem; font-weight: 800; color: var(--primary-900);">My Complaints</h1>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Search and filter all grievances you have logged with campus authorities.
+          </p>
+        </div>
+        <div>
+          <a href="submit.html" class="btn btn-primary">+ File New Complaint</a>
+        </div>
+      </div>
+
+      <!-- Live Filter & Search Bar -->
+      <div class="filter-bar">
+        <div class="search-input-group">
+          <input 
+            type="text" 
+            id="search-input" 
+            class="form-control" 
+            placeholder="🔍 Search by ticket ID, title, keyword..."
+          >
+        </div>
+
+        <select id="filter-category" class="filter-select">
+          <option value="">All Categories</option>
+        </select>
+
+        <select id="filter-status" class="filter-select">
+          <option value="">All Statuses</option>
+          <option value="Pending">Pending (Orange)</option>
+          <option value="In Progress">In Progress (Blue)</option>
+          <option value="Resolved">Resolved (Green)</option>
+          <option value="Rejected">Rejected (Red)</option>
+        </select>
+
+        <select id="filter-priority" class="filter-select">
+          <option value="">All Priorities</option>
+          <option value="Urgent">Urgent</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+
+        <button id="btn-reset-filters" class="btn btn-sm btn-secondary" title="Reset all filters">
+          Reset
+        </button>
+      </div>
+
+      <!-- Complaints Data Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Grievance Records</h2>
+            <p class="card-subtitle">Click "View" to see status lifecycle and administration remarks.</p>
+          </div>
+          <span id="complaint-count-badge" class="badge badge-student" style="font-size: 0.82rem;">
+            Loading...
+          </span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Ticket ID</th>
+                <th>Title &amp; Location</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Date Filed</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody id="complaints-table-body">
+              <!-- Rendered dynamically by complaints.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty Results Message -->
+        <div id="empty-complaints-state" class="empty-state" style="display: none;">
+          <div class="empty-state-icon">🔍</div>
+          <div class="empty-state-title">No complaints match your criteria</div>
+          <p style="margin-bottom: 16px;">Try adjusting your search query or reset your category/status filters.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 CampusVoice — College Grievance &amp; Complaint Redressal System.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/complaints.js"></script>
+</body>
+</html>
