@@ -12,7 +12,7 @@ const DEMO_ACCOUNTS = {
   student: {
     email: 'student@college.com',
     password: '12345',
-    name: 'Aarav Sharma',
+    name: 'Vishesh Singhal',
     role: 'student'
   },
   admin: {

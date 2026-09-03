@@ -31,7 +31,7 @@ const COMPLAINT_PRIORITIES = ['Low', 'Medium', 'High', 'Urgent'];
 const SEED_COMPLAINTS = [
   {
     id: 'CMP-1001',
-    studentName: 'Aarav Sharma',
+    studentName: 'Vishesh Singhal',
     studentEmail: 'student@college.com',
     title: 'Wi-Fi connection drops in Hostel Block B',
     category: 'IT/Internet',
