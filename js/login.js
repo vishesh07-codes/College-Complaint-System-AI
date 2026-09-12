@@ -25,9 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const regEmailInput = document.getElementById('reg-email');
   const regPasswordInput = document.getElementById('reg-password');
 
-  // Demo buttons
-  const btnDemoStudent = document.getElementById('btn-demo-student');
-  const btnDemoAdmin = document.getElementById('btn-demo-admin');
 
   // -------------------------------------------------------------------
   // Tab Switching
@@ -74,29 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (urlParams.get('tab') === 'register' && tabRegister) {
       tabRegister.click();
     }
-  }
-
-  // -------------------------------------------------------------------
-  // Quick-fill buttons for instant demo login
-  // -------------------------------------------------------------------
-  if (btnDemoStudent) {
-    btnDemoStudent.addEventListener('click', () => {
-      if (tabLogin) tabLogin.click();
-      emailInput.value = 'student@college.com';
-      passwordInput.value = '12345';
-      clearAlerts();
-      performLogin('student@college.com', '12345');
-    });
-  }
-
-  if (btnDemoAdmin) {
-    btnDemoAdmin.addEventListener('click', () => {
-      if (tabLogin) tabLogin.click();
-      emailInput.value = 'admin@college.com';
-      passwordInput.value = 'admin123';
-      clearAlerts();
-      performLogin('admin@college.com', 'admin123');
-    });
   }
 
   // -------------------------------------------------------------------
