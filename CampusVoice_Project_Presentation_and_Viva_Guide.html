@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusVoice - Project Presentation & Viva Guide</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 18mm 16mm 18mm 16mm;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #0f172a;
+            line-height: 1.5;
+            background: #ffffff;
+            margin: 0;
+            padding: 20px;
+            font-size: 13px;
+        }
+        @media print {
+            body {
+                padding: 0;
+                font-size: 12px;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #2563eb;
+            margin: 0 0 6px 0;
+        }
+        .subtitle {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 8px 0;
+        }
+        .meta {
+            font-size: 12px;
+            color: #64748b;
+            font-style: italic;
+            margin: 0;
+        }
+        h2 {
+            font-size: 18px;
+            color: #1e3a8a;
+            border-left: 4px solid #2563eb;
+            padding-left: 10px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            page-break-after: avoid;
+        }
+        h3 {
+            font-size: 14px;
+            color: #0f172a;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            page-break-after: avoid;
+        }
+        p {
+            margin: 0 0 10px 0;
+        }
+        ul {
+            margin: 0 0 12px 20px;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 6px;
+        }
+        .bold-tag {
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .script-box {
+            background-color: #f1f5f9;
+            border-left: 4px solid #2563eb;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin: 14px 0;
+            page-break-inside: avoid;
+        }
+        .script-title {
+            font-weight: 700;
+            color: #2563eb;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .script-text {
+            font-style: italic;
+            color: #334155;
+            font-size: 12px;
+            line-height: 1.5;
+            margin: 0;
+        }
+        .qa-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            page-break-inside: avoid;
+        }
+        .qa-question {
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+        .qa-answer {
+            color: #1e293b;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+        .qa-answer strong {
+            color: #0f172a;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12px;
+            page-break-inside: avoid;
+        }
+        th {
+            background: #2563eb;
+            color: #ffffff;
+            font-weight: 600;
+            text-align: left;
+            padding: 8px 12px;
+        }
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+        code {
+            background: #e2e8f0;
+            color: #0f172a;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-family: Consolas, monospace;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1 class="title">CampusVoice</h1>
+        <div class="subtitle">College Grievance Redressal Portal &mdash; Complete Architecture, Team Division & Viva Guide</div>
+        <div class="meta">Role: Senior Full Stack Engineer & College Evaluator Guide | Team Size: 3-4 Members</div>
+    </div>
+
+    <h2>1. High-Level Architecture Overview</h2>
+    <p>
+        <strong>CampusVoice</strong> is a full-stack web application designed to digitize and streamline college grievance resolution. 
+        It replaces physical complaint books with an auditable, transparent digital workflow supporting distinct personas: 
+        <strong>Students</strong> (who lodge and track complaints) and <strong>Administrators</strong> (who review and update complaint statuses).
+    </p>
+
+    <h3>End-to-End Architectural Data Flow</h3>
+    <ul>
+        <li><span class="bold-tag">Step 1 (Client Submission):</span> Student fills out the grievance form on <code>submit.html</code> (Title, Category, Priority, Description).</li>
+        <li><span class="bold-tag">Step 2 (Client Validation & Fetch):</span> JavaScript (<code>submit.js</code>) intercepts the submit event, validates non-empty inputs, and calls <code>data.js</code> (<code>createComplaint</code>).</li>
+        <li><span class="bold-tag">Step 3 (HTTP Transmission):</span> An asynchronous POST request carrying a JSON payload and session cookies is transmitted to <code>/api/complaints</code>.</li>
+        <li><span class="bold-tag">Step 4 (Controller & Auth Guards):</span> Flask checks <code>session['user_id']</code> via the <code>@login_required</code> decorator, re-validates payload bounds, and generates a formatted identifier (e.g., <code>CMP-100X</code>).</li>
+        <li><span class="bold-tag">Step 5 (Database Persistence):</span> PyMySQL executes a parameterized INSERT query into MySQL, assigning <code>user_id</code> as a foreign key referencing the <code>users</code> table.</li>
+        <li><span class="bold-tag">Step 6 (UI Feedback):</span> Server returns <code>{ success: true, complaint_id }</code>; the UI renders an immediate notification toast without a page reload.</li>
+        <li><span class="bold-tag">Step 7 (Admin Lifecycle):</span> Admin logs in, views grievances via <code>GET /api/admin/complaints</code> (SQL INNER JOIN with <code>users</code>), and updates status via <code>PUT /api/admin/complaints/&lt;id&gt;/status</code>.</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <h2>2. Member 1: Frontend Module</h2>
+    <p><span class="bold-tag">Role Summary:</span> Responsible for User Interface, Client-Side State, DOM Manipulation, and API Fetching.</p>
+
+    <h3>File & Component Breakdown</h3>
+    <ul>
+        <li><span class="bold-tag"><code>index.html</code>:</span> Public landing page with hero section, quick categories, workflow cards, statistics, and FAQ accordion.</li>
+        <li><span class="bold-tag"><code>login.html</code>:</span> Dual-tab authentication interface supporting both Sign In and Create Account forms.</li>
+        <li><span class="bold-tag"><code>dashboard.html</code>:</span> Student portal with real-time metric cards (Total, Pending, In Progress, Resolved) and recent complaints list.</li>
+        <li><span class="bold-tag"><code>submit.html</code>:</span> Structured grievance filing form with category and priority dropdowns.</li>
+        <li><span class="bold-tag"><code>complaints.html</code>:</span> Complete student complaint history table with live search, status filtering, and priority filtering.</li>
+        <li><span class="bold-tag"><code>complaint-details.html</code>:</span> Read-only timeline view displaying tracking code, student identity, timestamp, status badge, and official admin remarks.</li>
+        <li><span class="bold-tag"><code>admin.html</code>:</span> Administrative dashboard with metrics, searchable complaint roster, and inline status update modal.</li>
+        <li><span class="bold-tag"><code>js/data.js</code>:</span> Centralized API abstraction module containing <code>async/await</code> fetch helpers.</li>
+        <li><span class="bold-tag"><code>js/main.js</code>:</span> Global layout controller managing active navigation links, session checks, and toast alerts.</li>
+        <li><span class="bold-tag"><code>css/style.css</code>:</span> Mobile-responsive styling utilizing CSS variables, flexbox, CSS grid, and interactive hover states.</li>
+    </ul>
+
+    <div class="script-box">
+        <div class="script-title">&#9733; 2-Minute Presentation Script for the Examiner</div>
+        <p class="script-text">
+            "Good morning, Respected Evaluator. I was responsible for the Frontend and Client-Side Architecture of CampusVoice.<br><br>
+            Our design goal was to build a clean, mobile-responsive, zero-dependency interface that provides students and administrators with intuitive navigation. I designed seven key pages using HTML5, modern CSS3, and JavaScript ES6. For students, we built dedicated views for registration, complaint submission, tracking history, and detailed status inspection. For staff, we built an administrative portal with filterable status tables.<br><br>
+            Instead of scattering API calls across individual pages, I abstracted all backend communication into a centralized service module, <code>js/data.js</code>. Whenever an action occurs—such as lodging a complaint—the form validates input constraints client-side, builds a JSON payload, and initiates an asynchronous <code>fetch()</code> call. If the backend accepts the request, our UI immediately parses the JSON response and dynamically updates the DOM using templates without requiring a full page refresh. We also implemented an alert toast system that gives instant visual feedback for errors or success states.<br><br>
+            Now I am ready to answer any questions regarding our frontend design, DOM manipulation, or client-side API integration."
+        </p>
+    </div>
+
+    <h3>Top 5 Frontend Viva Questions & Answers</h3>
+    <div class="qa-card">
+        <div class="qa-question">Q1: Why did you use Vanilla JavaScript instead of a framework like React or Vue?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> Vanilla JavaScript was chosen to eliminate complex build tooling, <code>node_modules</code> dependencies, and bundle overhead. It directly leverages native browser DOM APIs and the <code>fetch</code> interface, providing instant load times, zero compilation requirements, and proving foundational software engineering principles without framework abstraction.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q2: How do you prevent a user from submitting an empty or invalid complaint form?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> We implement two-tier validation. On the frontend in <code>submit.js</code>, we attach an event listener to form submission, call <code>event.preventDefault()</code>, and verify that title, category, priority, and description are non-empty. If invalid, an alert toast is shown immediately. If valid, data is sent to the server, which independently verifies the payload before database insertion.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q3: How does your search and filter feature work on complaints.html?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> When complaints are fetched via <code>GET /api/complaints</code>, they are held in a client-side array. We listen to <code>input</code> and <code>change</code> events on the search box and dropdowns. On each trigger, an in-memory filter runs: checking if complaint titles match the query string and whether the status matches the selected filter. The table DOM is then immediately updated without repeated network round-trips.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q4: How is sensitive data protected on the client side? Are passwords or tokens saved in localStorage?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> No passwords, tokens, or credentials are stored in <code>localStorage</code> or <code>sessionStorage</code>. Storing authentication tokens in <code>localStorage</code> leaves them vulnerable to Cross-Site Scripting (XSS) attacks. Instead, our application uses server-controlled HTTP session cookies handled transparently and securely by the browser.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q5: What is the purpose of event.preventDefault() in your form handling?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> By default, submitting an HTML form initiates a traditional HTTP navigation that reloads the entire page. Calling <code>event.preventDefault()</code> suppresses this behavior, allowing our asynchronous JavaScript (<code>fetch</code>) to transmit data in the background and update the interface smoothly.</div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>3. Member 2: Backend & API Module</h2>
+    <p><span class="bold-tag">Role Summary:</span> Responsible for Server Setup, RESTful Routing, Controller Logic, Request Validation, and Error Handling.</p>
+
+    <h3>API Routing & Controller Architecture</h3>
+    <ul>
+        <li><span class="bold-tag">Server Framework:</span> Flask 3.x WSGI micro-framework written in Python.</li>
+        <li><span class="bold-tag">Auth Endpoints:</span> <code>POST /api/auth/register</code>, <code>POST /api/auth/login</code>, <code>POST /api/auth/logout</code>, <code>GET /api/auth/me</code></li>
+        <li><span class="bold-tag">Student Endpoints:</span> <code>GET /api/complaints</code> (Student's own), <code>POST /api/complaints</code> (Lodge), <code>GET /api/complaints/&lt;id&gt;</code> (Details)</li>
+        <li><span class="bold-tag">Admin Endpoints:</span> <code>GET /api/admin/complaints</code> (Master list with JOIN), <code>PUT /api/admin/complaints/&lt;id&gt;/status</code> (Update status & remarks)</li>
+    </ul>
+
+    <div class="script-box">
+        <div class="script-title">&#9733; 2-Minute Presentation Script for the Examiner</div>
+        <p class="script-text">
+            "Good morning, Respected Evaluator. I developed the Backend Server and RESTful API Layer of this system.<br><br>
+            Our backend is built using Python and Flask. We structured the backend around REST design principles, establishing clear separation between user interfaces and data services. All business logic is centralized in <code>app.py</code>, which exposes structured endpoints under <code>/api/auth</code>, <code>/api/complaints</code>, and <code>/api/admin</code>.<br><br>
+            Whenever a request reaches our server, it goes through our validation pipeline. First, our custom Python route decorators intercept the request to verify whether the client holds an active session and whether their role has permission to access that endpoint. Second, our controllers validate the incoming JSON payload to ensure required fields are present, properly formatted, and within acceptable limits.<br><br>
+            For example, when an administrator changes a grievance status via <code>PUT /api/admin/complaints/&lt;id&gt;/status</code>, our backend validates that the requested status belongs to our permitted set—Pending, In Progress, Resolved, or Rejected—executes an update query via PyMySQL, and returns a structured JSON confirmation. Every database operation includes automated connection pooling, commit, and rollback logic to safeguard against errors.<br><br>
+            I am pleased to demonstrate any route controller, middleware logic, or API response handling."
+        </p>
+    </div>
+
+    <h3>Top 5 Backend Viva Questions & Answers</h3>
+    <div class="qa-card">
+        <div class="qa-question">Q1: What is a REST API and why did you choose it for this project?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> REST (Representational State Transfer) is an architectural style utilizing standard HTTP methods (<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>) and exchanging stateless JSON payloads. We chose REST because it cleanly decouples the frontend user experience from server business logic, allowing either layer to be upgraded, tested, or scaled independently.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q2: What are Python Decorators and how did you use them in your Flask code?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> A decorator is a design pattern that wraps an existing function to extend its behavior dynamically. We implemented <code>@login_required</code> to verify the existence of <code>session['user_id']</code> and <code>@admin_required</code> to verify <code>session.get('role') == 'admin'</code>. If unauthorized, requests are terminated immediately with HTTP 401 or 403 status codes.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q3: Why do you use PUT instead of POST for updating a complaint status?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> Under HTTP/1.1 semantics, <code>POST</code> is intended for creating subordinate resources, whereas <code>PUT</code> is specified for updating or replacing an existing resource at a specific URI. Since updating a status modifies an existing record at <code>/api/admin/complaints/&lt;id&gt;/status</code>, <code>PUT</code> is semantically correct and idempotent.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q4: How does Flask handle Cross-Origin Resource Sharing (CORS)?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> Because our Flask application serves both the static frontend files and the REST API endpoints from the same origin (host and port), CORS browser policies are not triggered. If the frontend were deployed on a different domain, we would configure the <code>flask-cors</code> extension to set <code>Access-Control-Allow-Origin</code> headers.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q5: What happens if the database goes down while a user submits a complaint?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> The database connection attempt raises a <code>pymysql.MySQLError</code>. In our controller, this is intercepted inside a <code>try...except</code> block: any open transaction is rolled back via <code>conn.rollback()</code>, the error is logged, and the client receives a clean HTTP 500 JSON response (<code>{'error': 'Database unavailable'}</code>) without crashing the application.</div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>4. Member 3: Database & Data Modeling</h2>
+    <p><span class="bold-tag">Role Summary:</span> Responsible for Schema Normalization, Relational Modeling, Data Types, Constraints, and Persistence.</p>
+
+    <h3>Relational Schema Definition</h3>
+    <ul>
+        <li><span class="bold-tag">Table <code>users</code>:</span> <code>id</code> (PK, AUTO_INCREMENT), <code>name</code> (VARCHAR 100), <code>email</code> (VARCHAR 100 UNIQUE), <code>password</code> (VARCHAR 255), <code>role</code> (ENUM 'student', 'admin'), <code>created_at</code> (TIMESTAMP).</li>
+        <li><span class="bold-tag">Table <code>complaints</code>:</span> <code>id</code> (PK), <code>complaint_id</code> (VARCHAR 20 UNIQUE), <code>user_id</code> (FK -> users.id), <code>title</code> (VARCHAR 200), <code>category</code> (ENUM), <code>priority</code> (ENUM), <code>description</code> (TEXT), <code>status</code> (ENUM), <code>admin_remarks</code> (TEXT), <code>created_at</code>, <code>updated_at</code>.</li>
+    </ul>
+
+    <div class="script-box">
+        <div class="script-title">&#9733; 2-Minute Presentation Script for the Examiner</div>
+        <p class="script-text">
+            "Good morning, Respected Evaluator. I was responsible for the Database Architecture, Relational Modeling, and Data Persistence.<br><br>
+            For our storage engine, we chose MySQL because of its ACID transactional guarantees and robust foreign key integrity. Our database, <code>college_complaints</code>, contains two core relational entities: <code>users</code> and <code>complaints</code>.<br><br>
+            When designing the schema, our primary objective was achieving Third Normal Form (3NF). We deliberately avoided storing redundant student information—such as student name or contact details—inside the complaints table. Instead, the complaints table holds a foreign key reference, <code>user_id</code>, linked to <code>users.id</code>. Whenever the admin portal needs student details, we execute an optimized <code>INNER JOIN</code> in MySQL. If a student ever updates their profile details, the change is reflected across all their past grievances automatically with zero data inconsistencies.<br><br>
+            Furthermore, we enforced strict data integrity using SQL <code>ENUM</code> constraints for fields like grievance category, priority, and status. We also separated our database primary key—an auto-incrementing integer for index efficiency—from our human-readable tracking identifier, <code>complaint_id</code>. All connections use parameterized SQL queries through PyMySQL, completely safeguarding the database from SQL Injection.<br><br>
+            I am ready to explain our schema constraints, normalization stages, or query executions."
+        </p>
+    </div>
+
+    <h3>Top 5 Database Viva Questions & Answers</h3>
+    <div class="qa-card">
+        <div class="qa-question">Q1: What is Normalization and what Normal Form is your database in?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> Normalization organizes relational tables to eliminate redundancy and update anomalies. Our schema satisfies Third Normal Form (3NF): all columns contain atomic values (1NF), all attributes depend fully on the primary key without partial dependencies (2NF), and there are no transitive dependencies (3NF)—student details exist exclusively in the <code>users</code> table.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q2: What happens if a user record is deleted? What is your Foreign Key strategy?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> In our schema, <code>FOREIGN KEY (user_id) REFERENCES users(id)</code> does not use <code>ON DELETE CASCADE</code>. Grievance records constitute formal institutional legal records and must never be deleted accidentally if an account is removed. The database prevents deletion of a user who has active complaints, preserving institutional history.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q3: What is the difference between VARCHAR and TEXT in your schema?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> <code>VARCHAR(200)</code> stores variable-length strings inline up to 200 characters, ideal for short, indexable data like <code>title</code> and <code>complaint_id</code>. <code>TEXT</code> stores larger text blocks up to 64KB off-page with an internal pointer, making it ideal for complaint descriptions and admin remarks without bloating the primary row size.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q4: Why did you use ENUM for Status and Category instead of plain VARCHAR?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> <code>ENUM</code> provides two critical benefits: first, it strictly restricts inputs to predefined valid options ('Pending', 'In Progress', 'Resolved', 'Rejected') at the database level. Second, MySQL internally stores ENUM values as 1-byte integer indices, improving query performance and storage efficiency.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q5: How do you prevent SQL Injection at the database communication layer?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> We strictly utilize parameterized queries via PyMySQL using <code>%s</code> parameter placeholders. The SQL structure is compiled first, and parameters are transmitted as literal data rather than concatenated code, completely preventing SQL syntax injection.</div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>5. Member 4 / Shared: Authentication & Role-Based Access</h2>
+    <p><span class="bold-tag">Role Summary:</span> Responsible for Password Cryptography, Stateful Sessions, Route Authorization, and IDOR Prevention.</p>
+
+    <h3>Security & Cryptographic Architecture</h3>
+    <ul>
+        <li><span class="bold-tag">Password Hashing:</span> Passwords are never stored in plaintext or reversible encryption. We use Werkzeug's <code>generate_password_hash()</code> implementing the <code>scrypt</code> algorithm with unique cryptographic salts.</li>
+        <li><span class="bold-tag">Session Management:</span> Flask manages signed session cookies using a server-side <code>SECRET_KEY</code>. Cookies cannot be tampered with by the client.</li>
+        <li><span class="bold-tag">IDOR Protection:</span> Enforced in controllers: Students can strictly query complaints <code>WHERE user_id = session['user_id']</code>. Students attempting to fetch another student's complaint ID receive HTTP 403 Forbidden.</li>
+    </ul>
+
+    <div class="script-box">
+        <div class="script-title">&#9733; 2-Minute Presentation Script for the Examiner</div>
+        <p class="script-text">
+            "Good morning, Respected Evaluator. I was responsible for Authentication, Cryptography, and Role-Based Access Control (RBAC).<br><br>
+            Security is the backbone of any institution-grade portal. We focused on three critical security vectors: password protection, session security, and horizontal/vertical authorization.<br><br>
+            First, we enforce zero plaintext password storage. When a student registers, their password is processed through Werkzeug’s cryptographic engine using the <code>scrypt</code> hashing algorithm with randomized salt generation. Even if an intruder obtained a raw dump of our database, the passwords cannot be reversed or decrypted via dictionary or rainbow-table attacks.<br><br>
+            Second, we implemented stateful session management. Upon successful login, the server writes cryptographically signed session cookies. We created custom Python decorators—<code>@login_required</code> and <code>@admin_required</code>—that intercept requests to sensitive endpoints.<br><br>
+            Third, we protected against Insecure Direct Object References (IDOR). A student cannot view another student's complaint simply by altering the URL or ID. Our backend always cross-checks the logged-in <code>session['user_id']</code> against the database record's owner before returning data. Admins, and only admins, have permission to trigger status updates via <code>/api/admin</code>.<br><br>
+            I am prepared to explain our hashing algorithms, session lifecycle, or authorization code."
+        </p>
+    </div>
+
+    <h3>Top 5 Auth & Security Viva Questions & Answers</h3>
+    <div class="qa-card">
+        <div class="qa-question">Q1: Why should passwords never be stored in plain text or encrypted with two-way encryption like AES?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> Plain text exposes credentials directly in case of a database breach. Two-way encryption relies on a private secret key; if that key is compromised, all passwords can be decrypted. In contrast, one-way cryptographic hashing (<code>scrypt</code>) is irreversible: verification compares hashes rather than reconstructing passwords.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q2: What is a Salt and why is it important in password hashing?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> A salt is a cryptographically random byte string generated and appended to the password before hashing. It ensures that identical passwords generate completely different hashes in the database, fully defeating precomputed rainbow-table and dictionary attacks.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q3: What is the difference between Authentication and Authorization?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> Authentication (AuthN) verifies identity ("Who are you?"), such as checking credentials during login. Authorization (AuthZ) verifies permissions ("What are you permitted to do?"), such as confirming whether an authenticated user possesses the admin role to modify grievance statuses.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q4: What is an IDOR vulnerability and how did you prevent it?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> IDOR (Insecure Direct Object Reference) occurs when an application exposes a record identifier (e.g., <code>/api/complaints/5</code>) without verifying ownership. We prevent this by verifying in <code>app.py</code>: <code>if session.get('role') != 'admin' and complaint['user_id'] != session['user_id']: return jsonify({'error': 'Access denied'}), 403</code>.</div>
+    </div>
+    <div class="qa-card">
+        <div class="qa-question">Q5: How does Flask protect against Session Tampering?</div>
+        <div class="qa-answer"><strong>Direct Answer:</strong> Flask signs session cookies cryptographically using HMAC with the application's <code>SECRET_KEY</code>. If a client tampers with cookie contents (such as changing <code>role: 'student'</code> to <code>'admin'</code>), the cryptographic signature verification fails on the server, and Flask discards the session immediately.</div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>6. Team Coordination Quick Reference Table</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Member</th>
+                <th>Focus Area</th>
+                <th>Primary Code Files</th>
+                <th>Key Technical Concept</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Member 1</strong></td>
+                <td>Frontend & UI</td>
+                <td><code>*.html</code>, <code>js/data.js</code>, <code>css/style.css</code></td>
+                <td>Async/Await Fetch, In-Memory Filtering, DOM Templates, Toasts</td>
+            </tr>
+            <tr>
+                <td><strong>Member 2</strong></td>
+                <td>Backend & APIs</td>
+                <td><code>app.py</code> (Routes & Controllers)</td>
+                <td>REST Architecture, JSON Validation, PyMySQL, Error Rollback</td>
+            </tr>
+            <tr>
+                <td><strong>Member 3</strong></td>
+                <td>Database & Schema</td>
+                <td><code>schema.sql</code>, <code>seed.py</code>, MySQL</td>
+                <td>3NF Normalization, Foreign Key Integrity, ENUMs, INNER JOINs</td>
+            </tr>
+            <tr>
+                <td><strong>Member 4</strong></td>
+                <td>Auth & Security</td>
+                <td><code>app.py</code> (Decorators, Werkzeug)</td>
+                <td>scrypt Hashing, Session Cookies, RBAC Decorators, IDOR Protection</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
