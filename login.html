@@ -33,10 +33,24 @@
           <p class="card-subtitle">Access your student grievance dashboard or admin control panel.</p>
         </div>
 
-        <!-- Inline Error Banner -->
-        <div id="login-error" style="display: none; background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; padding: 12px; border-radius: 6px; font-size: 0.88rem; margin: 16px 0;"></div>
+        <!-- Tab Switcher: Sign In vs Register -->
+        <div style="display: flex; background: #f1f5f9; padding: 4px; border-radius: var(--radius-sm); margin: 18px 0 14px 0;">
+          <button type="button" id="tab-btn-login" class="btn btn-sm btn-block" style="background: #ffffff; color: var(--primary-800); box-shadow: var(--shadow-sm); border: none; font-weight: 700; border-radius: 4px;">
+            Sign In
+          </button>
+          <button type="button" id="tab-btn-register" class="btn btn-sm btn-block" style="background: transparent; color: var(--text-muted); border: none; font-weight: 600; border-radius: 4px;">
+            Create Account
+          </button>
+        </div>
 
-        <form id="login-form" style="margin-top: 20px;">
+        <!-- Inline Error Banner -->
+        <div id="login-error" style="display: none; background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; padding: 12px; border-radius: 6px; font-size: 0.88rem; margin: 12px 0;"></div>
+
+        <!-- Inline Success Banner -->
+        <div id="login-success" style="display: none; background-color: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 12px; border-radius: 6px; font-size: 0.88rem; margin: 12px 0;"></div>
+
+        <!-- 1. Sign In Form -->
+        <form id="login-form" style="margin-top: 10px;">
           <div class="form-group">
             <label class="form-label" for="email">Campus Email Address <span class="required">*</span></label>
             <input 
@@ -63,6 +77,49 @@
 
           <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 10px;">
             Sign In &rarr;
+          </button>
+        </form>
+
+        <!-- 2. Register Form -->
+        <form id="register-form" style="margin-top: 10px; display: none;">
+          <div class="form-group">
+            <label class="form-label" for="reg-name">Full Name <span class="required">*</span></label>
+            <input 
+              type="text" 
+              id="reg-name" 
+              class="form-control" 
+              placeholder="e.g. Rahul Sharma" 
+              required
+              autocomplete="name"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Campus Email Address <span class="required">*</span></label>
+            <input 
+              type="email" 
+              id="reg-email" 
+              class="form-control" 
+              placeholder="e.g. rahul@college.com" 
+              required
+              autocomplete="email"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Create Password <span class="required">*</span></label>
+            <input 
+              type="password" 
+              id="reg-password" 
+              class="form-control" 
+              placeholder="At least 5 characters" 
+              required
+              autocomplete="new-password"
+            >
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 10px;">
+            Create Student Account &rarr;
           </button>
         </form>
 

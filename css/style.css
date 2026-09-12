@@ -962,3 +962,451 @@ a:hover {
     gap: 10px;
   }
 }
+
+/* ==========================================================================
+   LANDING PAGE (HOME) CUSTOM STYLES — Matches screenshot design exactly
+   ========================================================================== */
+
+/* Dark Blue Landing Navbar */
+.landing-navbar {
+  background-color: #142a4a;
+  border-bottom: 1px solid #1e3a63;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.landing-navbar .nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 65px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.landing-brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.landing-brand:hover {
+  color: #e2e8f0;
+  text-decoration: none;
+}
+
+.landing-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.landing-nav-link {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: var(--transition);
+  padding: 6px 10px;
+}
+
+.landing-nav-link:hover, .landing-nav-link.active {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.landing-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-nav-login {
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 7px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.btn-nav-login:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.btn-nav-register {
+  background: #ffffff;
+  color: #142a4a;
+  border: 1px solid #ffffff;
+  padding: 7px 18px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border-radius: 6px;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.btn-nav-register:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  text-decoration: none;
+}
+
+/* Light Soft Hero Section */
+.landing-hero {
+  background: #edf4fc;
+  padding: 70px 20px 60px 20px;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.landing-hero-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1a365d;
+  line-height: 1.25;
+  margin-bottom: 14px;
+  letter-spacing: -0.02em;
+}
+
+.landing-hero-subtitle {
+  font-size: 1.05rem;
+  color: #475569;
+  max-width: 600px;
+  margin: 0 auto 26px auto;
+  line-height: 1.5;
+}
+
+.landing-hero-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-landing-submit {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: 1px solid #2563eb;
+  padding: 9px 24px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-landing-submit:hover {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.btn-landing-register {
+  background-color: #ffffff;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+  padding: 9px 24px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-landing-register:hover {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  text-decoration: none;
+}
+
+/* Section Headings */
+.landing-section {
+  padding: 56px 20px;
+}
+
+.landing-section-alt {
+  background-color: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.landing-section-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-align: center;
+  margin-bottom: 36px;
+  letter-spacing: -0.01em;
+}
+
+.accent-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.accent-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #2563eb;
+  border-radius: 2px;
+}
+
+/* Why Use Our System Cards */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.why-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.why-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+}
+
+.why-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.why-icon.blue {
+  background-color: #2563eb;
+}
+
+.why-icon.purple {
+  background-color: #8b5cf6;
+}
+
+.why-icon.gold {
+  background-color: #eab308;
+}
+
+.why-content h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+
+.why-content p {
+  font-size: 0.88rem;
+  color: #64748b;
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* How It Works Steps */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.step-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 28px 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-3px);
+}
+
+.step-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  margin: 0 auto 16px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.step-badge.blue {
+  background-color: #2563eb;
+}
+
+.step-badge.green {
+  background-color: #10b981;
+}
+
+.step-badge.purple {
+  background-color: #8b5cf6;
+}
+
+.step-card h4 {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.step-card p {
+  font-size: 0.88rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Landing Categories Grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.category-tile {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px 14px;
+  text-align: center;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.category-tile:hover {
+  transform: translateY(-3px);
+  border-color: #2563eb;
+  box-shadow: var(--shadow-sm);
+}
+
+.category-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.category-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* Landing FAQ Cards */
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.faq-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+.faq-q {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.faq-a {
+  font-size: 0.9rem;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+/* Landing Footer */
+.landing-footer {
+  background-color: #142a4a;
+  color: #94a3b8;
+  padding: 28px 20px;
+  text-align: center;
+  font-size: 0.88rem;
+  border-top: 1px solid #1e3a63;
+}
+
+.landing-footer p {
+  color: #cbd5e1;
+  margin-bottom: 8px;
+}
+
+.landing-footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.landing-footer-links a {
+  color: #94a3b8;
+  font-size: 0.82rem;
+  text-decoration: none;
+}
+
+.landing-footer-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .landing-hero-title {
+    font-size: 1.9rem;
+  }
+  .landing-nav-menu {
+    display: none;
+  }
+}

@@ -2,14 +2,14 @@
  * js/admin.js
  * College Complaint Management System
  * Admin Control Panel: Campus-wide stats, advanced multi-filtering,
- * all-complaints management table, and status update modal.
+ * all-complaints management table, and status update modal via Flask & MySQL backend.
  */
 
 let allAdminComplaints = [];
 let activeModalComplaintId = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-  const user = getCurrentUser();
+document.addEventListener('DOMContentLoaded', async () => {
+  const user = await fetchCurrentUser();
   if (!user || user.role !== 'admin') return;
 
   const adminNameElem = document.getElementById('admin-greeting-name');
@@ -17,47 +17,31 @@ document.addEventListener('DOMContentLoaded', () => {
     adminNameElem.innerText = user.name || 'Administrator';
   }
 
-  loadAdminData();
   populateCategoryFilter();
   setupFilterListeners();
   setupModalEvents();
-
-  const resetBtn = document.getElementById('btn-reset-demo-data');
-  if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      if (confirm('Are you sure you want to reset all data back to the original demo complaints? Any new complaints you filed will be reset.')) {
-        resetComplaintsData();
-        showToast('All complaints reset to initial demo seeds.', 'info');
-        loadAdminData();
-      }
-    });
-  }
+  await loadAdminData();
 });
 
 /**
- * Load all complaints from localStorage and update stats & table.
+ * Load all complaints and stats from Flask API and update dashboard.
  */
-function loadAdminData() {
-  allAdminComplaints = getComplaints();
-  renderAdminStats();
-  renderAdminTable();
+async function loadAdminData() {
+  await renderAdminStats();
+  await renderAdminTable();
 }
 
 /**
- * Compute and render campus-wide KPIs.
+ * Fetch and render campus-wide KPIs.
  */
-function renderAdminStats() {
-  const total = allAdminComplaints.length;
-  const pending = allAdminComplaints.filter(c => c.status === 'Pending').length;
-  const inProgress = allAdminComplaints.filter(c => c.status === 'In Progress').length;
-  const resolved = allAdminComplaints.filter(c => c.status === 'Resolved').length;
-  const urgent = allAdminComplaints.filter(c => c.priority === 'Urgent' || c.priority === 'High').length;
+async function renderAdminStats() {
+  const stats = await getAdminStats();
 
-  setText('admin-stat-total', total);
-  setText('admin-stat-pending', pending);
-  setText('admin-stat-progress', inProgress);
-  setText('admin-stat-resolved', resolved);
-  setText('admin-stat-urgent', urgent);
+  setText('admin-stat-total', stats.total);
+  setText('admin-stat-pending', stats.pending);
+  setText('admin-stat-progress', stats.inProgress);
+  setText('admin-stat-resolved', stats.resolved);
+  setText('admin-stat-urgent', stats.urgent);
 }
 
 /**
@@ -88,18 +72,25 @@ function setupFilterListeners() {
   const prioritySelect = document.getElementById('admin-filter-priority');
   const clearBtn = document.getElementById('btn-admin-clear-filters');
 
-  if (searchInput) searchInput.addEventListener('input', renderAdminTable);
+  let debounceTimer = null;
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(renderAdminTable, 250);
+    });
+  }
+
   if (catSelect) catSelect.addEventListener('change', renderAdminTable);
   if (statusSelect) statusSelect.addEventListener('change', renderAdminTable);
   if (prioritySelect) prioritySelect.addEventListener('change', renderAdminTable);
 
   if (clearBtn) {
-    clearBtn.addEventListener('click', () => {
+    clearBtn.addEventListener('click', async () => {
       if (searchInput) searchInput.value = '';
       if (catSelect) catSelect.value = '';
       if (statusSelect) statusSelect.value = '';
       if (prioritySelect) prioritySelect.value = '';
-      renderAdminTable();
+      await renderAdminTable();
     });
   }
 }
@@ -107,35 +98,24 @@ function setupFilterListeners() {
 /**
  * Filter and render complaints in the admin table.
  */
-function renderAdminTable() {
+async function renderAdminTable() {
   const searchInput = document.getElementById('admin-search-input');
   const catSelect = document.getElementById('admin-filter-category');
   const statusSelect = document.getElementById('admin-filter-status');
   const prioritySelect = document.getElementById('admin-filter-priority');
 
-  const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
-  const cat = catSelect ? catSelect.value : '';
-  const status = statusSelect ? statusSelect.value : '';
-  const priority = prioritySelect ? prioritySelect.value : '';
+  const filters = {
+    search: searchInput ? searchInput.value.trim() : '',
+    category: catSelect ? catSelect.value : '',
+    status: statusSelect ? statusSelect.value : '',
+    priority: prioritySelect ? prioritySelect.value : ''
+  };
 
-  const filtered = allAdminComplaints.filter(c => {
-    const matchesQuery = !query ||
-      c.id.toLowerCase().includes(query) ||
-      c.title.toLowerCase().includes(query) ||
-      c.studentName.toLowerCase().includes(query) ||
-      (c.location && c.location.toLowerCase().includes(query)) ||
-      (c.department && c.department.toLowerCase().includes(query));
-
-    const matchesCat = !cat || c.category === cat;
-    const matchesStatus = !status || c.status === status;
-    const matchesPriority = !priority || c.priority === priority;
-
-    return matchesQuery && matchesCat && matchesStatus && matchesPriority;
-  });
+  allAdminComplaints = await getAdminComplaints(filters);
 
   const countBadge = document.getElementById('admin-count-badge');
   if (countBadge) {
-    countBadge.innerText = `Showing ${filtered.length} of ${allAdminComplaints.length} tickets`;
+    countBadge.innerText = `Showing ${allAdminComplaints.length} tickets`;
   }
 
   const tbody = document.getElementById('admin-table-body');
@@ -143,7 +123,7 @@ function renderAdminTable() {
 
   if (!tbody) return;
 
-  if (filtered.length === 0) {
+  if (allAdminComplaints.length === 0) {
     tbody.innerHTML = '';
     if (emptyState) emptyState.style.display = 'block';
     return;
@@ -151,7 +131,7 @@ function renderAdminTable() {
 
   if (emptyState) emptyState.style.display = 'none';
 
-  tbody.innerHTML = filtered.map(c => `
+  tbody.innerHTML = allAdminComplaints.map(c => `
     <tr>
       <td><span class="table-code">${escapeHtml(c.id)}</span></td>
       <td>
@@ -194,17 +174,17 @@ function setupModalEvents() {
     activeModalComplaintId = null;
   };
 
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+  if (closeBtn) closeBtn.onclick = closeModal;
+  if (cancelBtn) cancelBtn.onclick = closeModal;
 
   if (backdrop) {
-    backdrop.addEventListener('click', (e) => {
+    backdrop.onclick = (e) => {
       if (e.target === backdrop) closeModal();
-    });
+    };
   }
 
   if (saveBtn) {
-    saveBtn.addEventListener('click', () => {
+    saveBtn.onclick = async () => {
       if (!activeModalComplaintId) return;
 
       const statusSelect = document.getElementById('modal-status-select');
@@ -213,19 +193,26 @@ function setupModalEvents() {
       const newStatus = statusSelect ? statusSelect.value : 'In Progress';
       const newResponse = responseTextarea ? responseTextarea.value.trim() : '';
 
-      const updated = updateComplaint(activeModalComplaintId, {
-        status: newStatus,
-        adminResponse: newResponse
-      });
+      saveBtn.disabled = true;
+      saveBtn.innerText = 'Saving...';
 
-      if (updated) {
+      try {
+        await updateComplaintStatus(activeModalComplaintId, {
+          status: newStatus,
+          admin_response: newResponse
+        });
+
         showToast(`Complaint ${activeModalComplaintId} updated to "${newStatus}"!`, 'success');
         closeModal();
-        loadAdminData(); // Refresh table and KPIs
-      } else {
-        showToast('Failed to update complaint status.', 'error');
+        await loadAdminData(); // Refresh table and KPIs
+      } catch (err) {
+        console.error('Update error:', err);
+        showToast(err.message || 'Failed to update complaint status.', 'error');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerText = 'Save Changes →';
       }
-    });
+    };
   }
 }
 
@@ -234,9 +221,9 @@ function setupModalEvents() {
  * @param {string} complaintId
  */
 window.openUpdateStatusModal = function(complaintId) {
-  const complaint = getComplaintById(complaintId);
+  const complaint = allAdminComplaints.find(c => c.id === complaintId);
   if (!complaint) {
-    showToast('Complaint not found.', 'error');
+    showToast('Complaint record not found.', 'error');
     return;
   }
 

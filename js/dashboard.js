@@ -1,11 +1,12 @@
 /**
  * js/dashboard.js
  * College Complaint Management System
- * Powers the student dashboard metrics, KPI calculation, and recent complaints list.
+ * Powers the student dashboard metrics, KPI calculation, and recent complaints list
+ * via asynchronous REST API calls to Flask & MySQL.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const user = getCurrentUser();
+document.addEventListener('DOMContentLoaded', async () => {
+  const user = await fetchCurrentUser();
   if (!user) return;
 
   // Set personalized greeting
@@ -14,42 +15,31 @@ document.addEventListener('DOMContentLoaded', () => {
     greetingElem.innerText = user.name || 'Student';
   }
 
-  loadStudentDashboardData();
+  await loadStudentDashboardData();
 });
 
 /**
- * Filter complaints relevant to the logged-in student,
- * compute stats, and render recent items.
+ * Fetch complaints and statistics for the authenticated student from backend.
  */
-function loadStudentDashboardData() {
-  const user = getCurrentUser();
-  const allComplaints = getComplaints();
+async function loadStudentDashboardData() {
+  // Fetch stats directly from backend
+  const stats = await getStudentStats();
 
-  // Filter complaints submitted by this student's email
-  // If email matches or for demo purposes if student@college.com matches
-  const studentComplaints = allComplaints.filter(c => {
-    return c.studentEmail.toLowerCase() === user.email.toLowerCase();
-  });
-
-  // Calculate statistics
-  const total = studentComplaints.length;
-  const pending = studentComplaints.filter(c => c.status === 'Pending').length;
-  const inProgress = studentComplaints.filter(c => c.status === 'In Progress').length;
-  const resolved = studentComplaints.filter(c => c.status === 'Resolved').length;
-
-  // Update KPI counters
   const totalElem = document.getElementById('stat-total');
   const pendingElem = document.getElementById('stat-pending');
   const inProgressElem = document.getElementById('stat-in-progress');
   const resolvedElem = document.getElementById('stat-resolved');
 
-  if (totalElem) totalElem.innerText = total;
-  if (pendingElem) pendingElem.innerText = pending;
-  if (inProgressElem) inProgressElem.innerText = inProgress;
-  if (resolvedElem) resolvedElem.innerText = resolved;
+  if (totalElem) totalElem.innerText = stats.total;
+  if (pendingElem) pendingElem.innerText = stats.pending;
+  if (inProgressElem) inProgressElem.innerText = stats.inProgress;
+  if (resolvedElem) resolvedElem.innerText = stats.resolved;
 
-  // Render recent complaints table (top 5)
-  renderRecentComplaints(studentComplaints.slice(0, 5));
+  // Fetch student complaints list
+  const complaints = await getComplaints();
+
+  // Render top 5 recent complaints
+  renderRecentComplaints(complaints.slice(0, 5));
 }
 
 /**
@@ -62,7 +52,7 @@ function renderRecentComplaints(complaints) {
 
   if (!tableBody) return;
 
-  if (complaints.length === 0) {
+  if (!complaints || complaints.length === 0) {
     tableBody.innerHTML = '';
     if (emptyState) emptyState.style.display = 'block';
     return;

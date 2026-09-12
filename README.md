@@ -1,8 +1,36 @@
 # College Complaint Management System (CampusVoice)
 
-A full-featured, responsive, multi-page web application designed for colleges and universities to enable students to lodge complaints and track their status in real-time, while providing administrators with a powerful control panel to review, assign, and resolve campus grievances.
+A full-stack, secure, production-grade web application designed for colleges and universities. It enables students to lodge grievances and track their progress in real-time, while empowering campus administrators to oversee, prioritize, assign, and resolve student tickets.
 
-Built entirely with **pure HTML5, CSS3, and Vanilla JavaScript** — No frameworks, no external libraries, and no build tools required. Simply open `index.html` in any web browser.
+Built with **Python Flask**, **MySQL**, **Vanilla JavaScript**, **CSS3**, and **HTML5**.
+
+---
+
+## 🏗️ Architecture & Security Model
+
+```text
+Existing HTML5 / CSS3 / Vanilla JavaScript Frontend
+                        │
+                  (Fetch API)
+                        ▼
+            Python Flask Backend (app.py)
+            (Session-Based Authentication)
+                        │
+               (PyMySQL / SQL DDL)
+                        ▼
+                MySQL Database
+     (Normalized: users & complaints tables)
+```
+
+- **MySQL Database as Single Source of Truth**: Strictly uses MySQL (no client-side `localStorage` or SQLite).
+- **Normalized Schema**: No duplicate student information in the `complaints` table; user info is joined via `complaints.user_id = users.id`.
+- **Foreign Key Integrity**: Standard foreign key `FOREIGN KEY (user_id) REFERENCES users(id)` without `ON DELETE CASCADE` to prevent accidental loss of complaint records.
+- **Unique Public Complaint IDs**: Public tracking IDs (e.g. `CMP-1001`, `CMP-1002`) are stored with `UNIQUE(complaint_id)`, separate from the internal auto-increment primary key `id`.
+- **Werkzeug Password Hashing**: All passwords are encrypted using `generate_password_hash()` and verified via `check_password_hash()`. Plaintext passwords are never stored.
+- **Server-Side Session Authentication**: Authenticated sessions are tracked via secure HTTP cookies.
+- **Strict Authorization**:
+  - **Students**: Can only view, search, and submit complaints for themselves. The backend enforces `WHERE complaints.user_id = session['user_id']`.
+  - **Administrators**: Can access campus-wide analytics, view all student tickets, and update lifecycle statuses via `PUT /api/admin/complaints/<complaint_id>/status`. Students attempting admin actions receive `HTTP 403 Forbidden`.
 
 ---
 
@@ -10,131 +38,121 @@ Built entirely with **pure HTML5, CSS3, and Vanilla JavaScript** — No framewor
 
 ```text
 CollegeComplaint-System/
-├── index.html               # Public landing page with hero, features & role overview
-├── login.html               # Authentication portal with 1-click demo login buttons
-├── dashboard.html           # Student dashboard with live KPI counters & recent tickets
-├── submit.html              # Validated grievance submission form with inline errors
-├── complaints.html          # Student's complaint history with search & multi-filtering
-├── complaint-details.html   # Full ticket details, timeline tracker & admin action panel
-├── admin.html               # Admin control panel with campus KPIs & status update modal
+├── app.py                  # Python Flask backend (REST API & static serving)
+├── requirements.txt        # Python dependencies (Flask, Werkzeug, PyMySQL, python-dotenv)
+├── .env                    # MySQL credentials and secret key (git-ignored)
+├── .env.example            # Environment variables placeholder template
+├── .gitignore              # Ignores .env, venv, and Python cache
+├── schema.sql              # Normalized MySQL DDL for users and complaints
+├── seed.py                 # Development CLI script for database initialization & hashed seeding
+│
+├── index.html              # Public landing page with hero banner & features
+├── login.html              # Authentication portal with 1-click quick-fill demo buttons
+├── dashboard.html          # Student dashboard with live KPI counters & recent tickets
+├── submit.html             # Grievance submission form with real-time inline validation
+├── complaints.html         # Student's complaint history with live search & multi-filters
+├── complaint-details.html  # Full ticket view with progress timeline & official remarks
+├── admin.html              # Admin control panel with campus KPIs, filters & update modal
+│
 ├── css/
-│   └── style.css            # Unified, responsive blue-and-white college theme
-├── js/
-│   ├── data.js              # Data schema, demo seed records & localStorage CRUD helpers
-│   ├── main.js              # Global auth checks, role guards, navbar & toast alerts
-│   ├── login.js             # Form validation, credentials check & role routing
-│   ├── dashboard.js         # Student metrics calculation & recent complaints list
-│   ├── submit.js            # Input validation, ID generator (CMP-100X) & submission
-│   ├── complaints.js        # Search & filtering by Category, Status, Priority
-│   ├── complaint-details.js # Query-param reader, status timeline & admin updater
-│   └── admin.js             # Campus metrics, all-complaints table & status modal
-└── README.md                # Project documentation and viva guide
+│   └── style.css           # Single unified stylesheet with responsive college theme
+│
+└── js/
+    ├── data.js             # Asynchronous Fetch API layer replacing localStorage
+    ├── main.js             # Global session auth verification, dynamic navbar & toasts
+    ├── login.js            # Calls POST /api/auth/login with hashed credentials
+    ├── dashboard.js        # Asynchronously renders student metrics and recent tickets
+    ├── submit.js           # Submits tickets via POST /api/complaints
+    ├── complaints.js       # Asynchronously filters complaints via GET /api/complaints
+    ├── complaint-details.js# Asynchronously fetches single ticket via GET /api/complaints/<id>
+    └── admin.js            # Fetches admin data and updates status via PUT /api/admin/complaints/<id>/status
 ```
 
 ---
 
-## 🚀 How to Run the Project
+## 🛠️ Prerequisites & MySQL Setup
 
-1. **Direct Browser Execution**:
-   - Double-click `index.html` or right-click `index.html` &rarr; *Open with Google Chrome / Microsoft Edge / Firefox*.
-   - Or open your terminal and run:
-     ```bash
-     start index.html
-     ```
+1. **Python 3.10+**: Verify installation with `python --version`.
+2. **MySQL Server**: Ensure MySQL Server is running locally (or via XAMPP / WAMP / Docker).
+   - Default port: `3306`
+   - Default user: `root`
 
-2. **Using a Local Server (Optional)**:
-   - If using VS Code: Right-click `index.html` &rarr; **Open with Live Server**.
-   - Or with Python:
-     ```bash
-     python -m http.server 8000
-     ```
-     Then open `http://localhost:8000` in your browser.
+### 1. Configure Environment Variables
+Copy `.env.example` to `.env` (or verify `.env`):
+```bash
+cp .env.example .env
+```
+Ensure your MySQL credentials in `.env` match your local environment:
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=your_mysql_password
+DB_NAME=college_complaints
+SECRET_KEY=campusvoice_flask_secret_key_2026_secure
+PORT=5000
+```
+
+### 2. Install Python Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Initialize & Seed the MySQL Database
+Run the standalone development database initializer:
+```bash
+python seed.py
+```
+This script will:
+- Connect to your MySQL server.
+- Execute `schema.sql` to create `college_complaints` database and normalized tables.
+- Insert development accounts with **Werkzeug-hashed passwords**:
+  - **Student**: `student@college.com` / `12345`
+  - **Admin**: `admin@college.com` / `admin123`
+- Pre-seed realistic sample complaints (`CMP-1001` through `CMP-1005`).
 
 ---
 
-## 👥 Demo Roles & Credentials
+## 🚀 Running the Application
 
-For fast evaluation and viva testing, **1-Click Quick Fill buttons** are provided directly on `login.html`:
+Start the Flask server:
+```bash
+python app.py
+```
 
-| Role | Email | Password | Allowed Access |
+Open your browser and navigate to:
+```text
+http://localhost:5000
+```
+
+---
+
+## 👥 Demo User Credentials
+
+| Role | Email | Password | Access Rights |
 |---|---|---|---|
-| **Student** | `student@college.com` | `12345` | Dashboard, Submit Complaint, My Complaints, View Details |
-| **Administrator** | `admin@college.com` | `admin123` | Admin Portal, All Complaints, Update Status, Remarks Modal |
+| **Student** | `student@college.com` | `12345` | Student Dashboard, Submit Complaint, My Complaints, Ticket Details |
+| **Administrator** | `admin@college.com` | `admin123` | Admin Portal, All Campus Tickets, Status Update Modal & Remarks |
+
+*(1-Click Demo Login buttons are available on `login.html` for rapid testing).*
 
 ---
 
-## 🔄 Roles & Workflow
+## 🔌 API Reference
 
-### 👨‍🎓 Student Flow
-1. **Login**: Authenticate at `login.html` as Student.
-2. **Dashboard**: View personal statistics (Total, Pending, In Progress, Resolved) and recent activity.
-3. **Submit Complaint**: Fill `submit.html` with category, priority, location, title, and detailed description. Inline validation guarantees clean data.
-4. **My Complaints**: Search tickets in real time, filter by Category / Status / Priority.
-5. **Track Status**: Click "View" to open `complaint-details.html` and inspect the visual step timeline (`Submitted` &rarr; `Under Review` &rarr; `Resolved`) and administrative responses.
+### Authentication
+- `POST /api/auth/register` — Register a new student account (`{ name, email, password }`).
+- `POST /api/auth/login` — Authenticate and establish Flask session (`{ email, password }`).
+- `POST /api/auth/logout` — Terminate session.
+- `GET /api/auth/me` — Retrieve active session user information.
 
-### 🏛️ Administrator Flow
-1. **Login**: Authenticate at `login.html` as Administrator.
-2. **Admin Portal**: View campus-wide KPI metrics and tickets submitted by all students.
-3. **Filter & Search**: Quickly filter tickets by department, category, or status.
-4. **Update Status**: Click "Update" on any ticket row to open the status modal:
-   - Change status: `Pending` &rarr; `In Progress` &rarr; `Resolved` (or `Rejected`).
-   - Add official remarks (e.g. *"Work order assigned to AC technician"*).
-5. **Cross-Role Reflection**: When the student logs in or visits `complaint-details.html`, the updated status badge, progress timeline, and admin response are displayed instantly.
+### Student Complaints
+- `GET /api/complaints` — Retrieve complaints for the authenticated student (Supports `?category=...&status=...&priority=...&search=...`).
+- `GET /api/complaints/<complaint_id>` — Retrieve full details for a complaint (Restricted to owner student or admin).
+- `POST /api/complaints` — Submit a new grievance (`user_id` taken strictly from session).
+- `GET /api/stats/student` — Retrieve student KPI counters (Total, Pending, In Progress, Resolved).
 
----
-
-## 📊 Data Schema (`js/data.js`)
-
-All data is stored in the browser's `localStorage` under the key `college_complaints_data` and persists across page reloads:
-
-```javascript
-{
-  id: "CMP-1001",                   // Auto-generated sequential ID
-  studentName: "Aarav Sharma",       // Student full name
-  studentEmail: "student@college.com",// Student email
-  title: "Wi-Fi drops in Block B",   // Title (min 5 chars)
-  category: "IT/Internet",           // Category from pre-defined list
-  department: "Computer Science",   // Student department
-  location: "Hostel Block B, 3rd Fl",// Exact campus location
-  priority: "High",                 // Low, Medium, High, Urgent
-  status: "Pending",                 // Pending, In Progress, Resolved, Rejected
-  description: "Detailed issue...", // Detailed description (min 15 chars)
-  adminResponse: "",                 // Official response added by admin
-  createdAt: "2026-08-30T10:30:00Z",// ISO timestamp
-  updatedAt: "2026-08-30T10:30:00Z" // ISO timestamp
-}
-```
-
-### Supported Categories:
-`Academic`, `Infrastructure`, `Hostel`, `Library`, `Transport`, `Canteen`, `IT/Internet`, `Administration`, `Cleanliness`, `Other`.
-
-### Status Badges & Colors:
-- **Pending**: Orange (`#f59e0b` / bg: `#fef3c7`, text: `#b45309`)
-- **In Progress**: Blue (`#3b82f6` / bg: `#dbeafe`, text: `#1d4ed8`)
-- **Resolved**: Green (`#10b981` / bg: `#d1fae5`, text: `#047857`)
-- **Rejected**: Red (`#ef4444` / bg: `#fee2e2`, text: `#b91c1c`)
-
----
-
-## 🎓 Viva / Presentation Guide
-
-If explaining this project in a college viva or evaluation, highlight these architectural points:
-
-1. **No Backend Required (localStorage Architecture)**:
-   - Data persists in the user's browser `localStorage` using `JSON.stringify()` on write and `JSON.parse()` on read.
-   - Initial demo seed complaints auto-populate if the storage is empty, ensuring the application always has rich data for demonstration.
-
-2. **Role-Based Client Guarding (`js/main.js`)**:
-   - `enforceAuthGuard()` inspects `window.location.pathname` and the active session in `localStorage`.
-   - If a student tries to enter `admin.html`, the system alerts them and redirects to `dashboard.html`.
-   - Unauthenticated visitors attempting to open internal portals are redirected to `login.html`.
-
-3. **DOM Manipulation & Real-time Filtering (`js/complaints.js`, `js/admin.js`)**:
-   - Live search uses JavaScript array methods (`.filter()`, `.includes()`) attached to `input` and `change` event listeners, dynamically regenerating HTML table rows without full page reloads.
-
-4. **URL Query Parameters (`js/complaint-details.js`)**:
-   - `new URLSearchParams(window.location.search).get('id')` is used to load and render specific complaint details dynamically from a single template file.
-
-5. **Responsive CSS Design (`css/style.css`)**:
-   - CSS Grid (`grid-template-columns: repeat(auto-fit, minmax(...))`) and Flexbox are used for cards, stats, and navigation.
-   - Tables use `.table-responsive` with `overflow-x: auto` so tables never overflow or break on mobile devices.
+### Administration (Admin Only — HTTP 403 for Students)
+- `GET /api/admin/complaints` — View all campus complaints across all students with filters.
+- `GET /api/admin/stats` — View campus-wide KPI statistics.
+- `PUT /api/admin/complaints/<complaint_id>/status` — Update complaint lifecycle status and official remarks (`{ status, admin_response }`).

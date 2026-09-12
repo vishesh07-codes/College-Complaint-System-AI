@@ -1,13 +1,13 @@
 /**
  * js/complaint-details.js
  * College Complaint Management System
- * Renders individual complaint view, status progression timeline,
- * and allows administrators to directly change status and provide remarks.
+ * Fetches and displays individual complaint details and lifecycle progression timeline.
+ * (Admin status updates are exclusively handled by admin.js via PUT /api/admin/complaints/<id>/status).
  */
 
 let currentComplaintId = null;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   currentComplaintId = urlParams.get('id');
 
@@ -16,17 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  loadComplaintDetails();
+  await loadComplaintDetails();
 });
 
 /**
- * Load complaint from localStorage and populate details.
+ * Load complaint from Flask backend and populate details.
  */
-function loadComplaintDetails() {
-  const complaint = getComplaintById(currentComplaintId);
+async function loadComplaintDetails() {
+  const complaint = await getComplaintById(currentComplaintId);
 
   if (!complaint) {
-    showErrorState(`Complaint with ID "${escapeHtml(currentComplaintId)}" was not found.`);
+    showErrorState(`Complaint with ID "${escapeHtml(currentComplaintId)}" was not found or you are not authorized to view it.`);
     return;
   }
 
@@ -64,9 +64,6 @@ function loadComplaintDetails() {
 
   // Render Status Lifecycle Timeline
   renderTimeline(complaint);
-
-  // If viewing user is an Admin, enable the Admin Action Control Box
-  setupAdminControls(complaint);
 }
 
 /**
@@ -77,11 +74,6 @@ function renderTimeline(complaint) {
   if (!timelineContainer) return;
 
   const status = complaint.status;
-
-  // Lifecycle states:
-  // 1. Submitted (always completed)
-  // 2. In Progress / Under Investigation
-  // 3. Final Resolution (Resolved or Rejected)
 
   let step2Class = '';
   let step3Class = '';
@@ -128,49 +120,6 @@ function renderTimeline(complaint) {
       <div class="timeline-desc">${step3Desc}</div>
     </div>
   `;
-}
-
-/**
- * Enables in-place status changes and remarks input for Admin users.
- */
-function setupAdminControls(complaint) {
-  const user = getCurrentUser();
-  const adminCard = document.getElementById('admin-action-card');
-  if (!adminCard) return;
-
-  // Show only if admin
-  if (!user || user.role !== 'admin') {
-    adminCard.style.display = 'none';
-    return;
-  }
-
-  adminCard.style.display = 'block';
-
-  const statusSelect = document.getElementById('admin-status-select');
-  const responseTextarea = document.getElementById('admin-remarks-input');
-  const saveBtn = document.getElementById('btn-save-admin-update');
-
-  if (statusSelect) statusSelect.value = complaint.status;
-  if (responseTextarea) responseTextarea.value = complaint.adminResponse || '';
-
-  if (saveBtn) {
-    saveBtn.onclick = () => {
-      const newStatus = statusSelect.value;
-      const newRemarks = responseTextarea.value.trim();
-
-      const updated = updateComplaint(complaint.id, {
-        status: newStatus,
-        adminResponse: newRemarks
-      });
-
-      if (updated) {
-        showToast(`Complaint ${complaint.id} status updated to "${newStatus}"!`, 'success');
-        loadComplaintDetails(); // Refresh details on page
-      } else {
-        showToast('Failed to update complaint.', 'error');
-      }
-    };
-  }
 }
 
 function setText(id, text) {

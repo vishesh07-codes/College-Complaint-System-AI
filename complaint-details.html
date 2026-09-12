@@ -126,42 +126,7 @@
           </div>
         </div>
 
-        <!-- Admin-Only Status Action Panel (visible only when logged in as Admin) -->
-        <div id="admin-action-card" class="card" style="display: none; background: #faf5ff; border: 1px solid #d8b4fe;">
-          <div class="card-header" style="border-color: #e9d5ff;">
-            <div>
-              <h2 class="card-title" style="color: #6b21a8; font-size: 1.15rem;">⚡ Administrative Action Panel</h2>
-              <p class="card-subtitle">As an authorized administrator, you can update this ticket's status and publish response remarks.</p>
-            </div>
-            <span class="badge badge-admin">ADMIN ONLY</span>
-          </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="admin-status-select">Update Lifecycle Status</label>
-              <select id="admin-status-select" class="form-control">
-                <option value="Pending">Pending (Orange)</option>
-                <option value="In Progress">In Progress (Blue)</option>
-                <option value="Resolved">Resolved (Green)</option>
-                <option value="Rejected">Rejected (Red)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="admin-remarks-input">Official Resolution / Action Remarks</label>
-            <textarea 
-              id="admin-remarks-input" 
-              class="form-control" 
-              rows="3" 
-              placeholder="Enter work order number, technician assigned, action taken, or explanation for student..."
-            ></textarea>
-          </div>
-
-          <button id="btn-save-admin-update" class="btn btn-primary">
-            Save Status &amp; Update Remarks
-          </button>
-        </div>
 
       </div>
 

@@ -3,127 +3,275 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>College Grievance Redressal & Complaint Portal</title>
+  <title>College Complaint System</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- Top Navigation -->
-  <nav class="navbar">
+  <!-- Top Dark Blue Navigation Bar (Matching Screenshot) -->
+  <nav class="landing-navbar">
     <div class="nav-container">
-      <a href="index.html" class="brand">
-        <div class="brand-logo">🎓</div>
-        <div>
-          <span class="brand-text">CampusVoice</span>
-          <span class="brand-tagline">College Grievance Portal</span>
-        </div>
+      <a href="index.html" class="landing-brand">
+        College Complaint System
       </a>
 
-      <div class="nav-menu" id="nav-links">
-        <a href="index.html" class="nav-link active">Home</a>
-        <a href="dashboard.html" class="nav-link">Student Portal</a>
-        <a href="admin.html" class="nav-link">Admin Portal</a>
+      <div class="landing-nav-menu">
+        <a href="index.html" class="landing-nav-link active">Home</a>
+        <a href="#about" class="landing-nav-link">About</a>
+        <a href="#contact" class="landing-nav-link">Contact</a>
       </div>
 
-      <div class="nav-actions">
-        <a href="login.html" class="btn btn-primary btn-sm">Login &rarr;</a>
-        <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">☰</button>
+      <div class="landing-nav-actions">
+        <a href="login.html" class="btn-nav-login">Login</a>
+        <a href="login.html?tab=register" class="btn-nav-register">Register</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <header class="hero">
+  <!-- Hero Section (Matching Screenshot) -->
+  <header class="landing-hero">
     <div class="container">
-      <span class="hero-tag">Official Student Support System</span>
-      <h1 class="hero-title">Your Voice Matters on Campus</h1>
-      <p class="hero-subtitle">
-        A transparent, fast, and accountable grievance redressal system. Submit complaints regarding academics, hostels, campus IT, infrastructure, and track real-time resolution from college authorities.
+      <h1 class="landing-hero-title">
+        College Complaint Management<br>System
+      </h1>
+      <p class="landing-hero-subtitle">
+        Submit your college complaints online and track their status easily.
       </p>
-      <div class="hero-cta">
-        <a href="login.html" class="btn btn-primary btn-lg" style="background-color: #ffffff; color: var(--primary-800); border-color: #ffffff;">
-          File a Complaint Now
+      <div class="landing-hero-actions">
+        <a href="submit.html" class="btn-landing-submit">
+          Submit
         </a>
-        <a href="login.html" class="btn btn-outline btn-lg" style="color: #ffffff; border-color: rgba(255,255,255,0.5);">
-          Administrative Portal
+        <a href="login.html?tab=register" class="btn-landing-register">
+          Register
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Main Information & Features -->
-  <main class="main-content">
+  <!-- Section: Why Use Our System? (Matching Screenshot) -->
+  <section class="landing-section">
     <div class="container">
+      <h2 class="landing-section-title">
+        Why Use <span class="accent-underline">Our</span> System?
+      </h2>
 
-      <!-- How it Works / Core Pillars -->
-      <div class="features-grid">
-        <div class="feature-box">
-          <div class="feature-icon">📝</div>
-          <h3 class="feature-title">1. Easy Online Submission</h3>
-          <p class="feature-text">
-            Submit issues related to Wi-Fi, classroom equipment, hostels, canteen, or sanitation in under two minutes with category tagging and priority indicators.
-          </p>
-        </div>
-
-        <div class="feature-box">
-          <div class="feature-icon">🔄</div>
-          <h3 class="feature-title">2. Live Status Tracking</h3>
-          <p class="feature-text">
-            Track your complaint lifecycle from <strong>Pending</strong> to <strong>In Progress</strong> and <strong>Resolved</strong> with clear visual progress timelines.
-          </p>
-        </div>
-
-        <div class="feature-box">
-          <div class="feature-icon">🛡️</div>
-          <h3 class="feature-title">3. Admin Accountability</h3>
-          <p class="feature-text">
-            Campus department heads and deans review complaints, assign maintenance personnel, and communicate official action notes directly to students.
-          </p>
-        </div>
-      </div>
-
-      <!-- Quick Role Access Cards -->
-      <div class="card" style="border-left: 4px solid var(--primary-600); margin-top: 40px;">
-        <div class="card-header">
-          <div>
-            <h2 class="card-title">Demo User Roles &amp; Credentials</h2>
-            <p class="card-subtitle">Test both student and administrator workflows with preloaded sample data.</p>
+      <div class="why-grid">
+        <!-- Card 1: Easy Complaint -->
+        <div class="why-card">
+          <div class="why-icon blue">
+            <span>&#10148;</span>
+          </div>
+          <div class="why-content">
+            <h4>Easy Complaint</h4>
+            <p>Submit your complaint online in a few simple steps.</p>
           </div>
         </div>
-        <div class="form-row" style="margin-top: 10px;">
-          <div style="background: #f8fafc; padding: 18px; border-radius: 8px; border: 1px solid var(--border-color);">
-            <h4 style="color: var(--primary-800); margin-bottom: 8px;">👨‍🎓 Student Role</h4>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">
-              Can submit complaints, track progress, and review responses on their submitted tickets.
-            </p>
-            <div style="font-size: 0.85rem; font-family: monospace; background: #ffffff; padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 14px;">
-              Email: <strong>student@college.com</strong><br>
-              Password: <strong>12345</strong>
-            </div>
-            <a href="login.html" class="btn btn-sm btn-outline btn-block">Login as Student &rarr;</a>
-          </div>
 
-          <div style="background: #f8fafc; padding: 18px; border-radius: 8px; border: 1px solid var(--border-color);">
-            <h4 style="color: var(--primary-800); margin-bottom: 8px;">🏛️ Administrator Role</h4>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">
-              Can view all campus tickets, update statuses, publish resolution notes, and view KPI metrics.
-            </p>
-            <div style="font-size: 0.85rem; font-family: monospace; background: #ffffff; padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 14px;">
-              Email: <strong>admin@college.com</strong><br>
-              Password: <strong>admin123</strong>
-            </div>
-            <a href="login.html" class="btn btn-sm btn-primary btn-block">Login as Admin &rarr;</a>
+        <!-- Card 2: Track Status -->
+        <div class="why-card">
+          <div class="why-icon purple">
+            <span>&#9776;</span>
+          </div>
+          <div class="why-content">
+            <h4>Track Status</h4>
+            <p>Check the current status of your complaint easily.</p>
+          </div>
+        </div>
+
+        <!-- Card 3: Digital Records -->
+        <div class="why-card">
+          <div class="why-icon gold">
+            <span>&#128194;</span>
+          </div>
+          <div class="why-content">
+            <h4>Digital Records</h4>
+            <p>Complaints are stored digitally for easy management.</p>
           </div>
         </div>
       </div>
-
     </div>
-  </main>
+  </section>
 
-  <!-- Footer -->
-  <footer class="footer">
+  <!-- Section: How It Works (Matching Screenshot) -->
+  <section class="landing-section landing-section-alt">
     <div class="container">
-      <p>&copy; 2026 CampusVoice — College Grievance & Complaint Redressal System. Built with HTML, CSS &amp; Vanilla JavaScript.</p>
+      <h2 class="landing-section-title">
+        How It Works
+      </h2>
+
+      <div class="steps-grid">
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="step-badge blue">1</div>
+          <h4>Submit</h4>
+          <p>Submit your complaint online</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="step-badge green">2</div>
+          <h4>Admin Checks</h4>
+          <p>Admin reviews your complaint</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="step-badge purple">3</div>
+          <h4>Status Updated</h4>
+          <p>Check the updated complaint status.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Extended Section: Covered Categories -->
+  <section class="landing-section">
+    <div class="container">
+      <h2 class="landing-section-title">
+        Grievance Categories Covered
+      </h2>
+      <p style="text-align: center; color: var(--text-muted); max-width: 620px; margin: -20px auto 32px auto; font-size: 0.95rem;">
+        The portal covers all campus departments to ensure every issue reaches the responsible administrative officer.
+      </p>
+
+      <div class="categories-grid">
+        <div class="category-tile">
+          <span class="category-icon">&#128218;</span>
+          <span class="category-name">Academic &amp; Labs</span>
+        </div>
+        <div class="category-tile">
+          <span class="category-icon">&#127968;</span>
+          <span class="category-name">Hostel &amp; Mess</span>
+        </div>
+        <div class="category-tile">
+          <span class="category-icon">&#128246;</span>
+          <span class="category-name">IT &amp; Wi-Fi Network</span>
+        </div>
+        <div class="category-tile">
+          <span class="category-icon">&#128214;</span>
+          <span class="category-name">Central Library</span>
+        </div>
+        <div class="category-tile">
+          <span class="category-icon">&#127829;</span>
+          <span class="category-name">Canteen &amp; Water</span>
+        </div>
+        <div class="category-tile">
+          <span class="category-icon">&#128652;</span>
+          <span class="category-name">Campus Transport</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Extended Section: About (id="about") -->
+  <section id="about" class="landing-section landing-section-alt">
+    <div class="container">
+      <div style="max-width: 860px; margin: 0 auto; text-align: center;">
+        <h2 class="landing-section-title" style="margin-bottom: 16px;">
+          About Campus Grievance Redressal Cell
+        </h2>
+        <p style="font-size: 1.02rem; color: #475569; line-height: 1.7; margin-bottom: 30px;">
+          The <strong>College Complaint Management System</strong> is an official institutional platform designed to ensure a responsive, fair, and accountable campus environment. Students can easily report equipment failures, sanitation problems, transport irregularities, or administrative challenges with complete transparency.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; text-align: left;">
+          <div style="background: #ffffff; padding: 18px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <div style="font-size: 1.1rem; font-weight: 700; color: #1e3a8a; margin-bottom: 6px;">⏱️ Fast Response</div>
+            <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Average review turnaround within 24 to 48 hours by dedicated maintenance staff.</p>
+          </div>
+
+          <div style="background: #ffffff; padding: 18px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <div style="font-size: 1.1rem; font-weight: 700; color: #1e3a8a; margin-bottom: 6px;">🔒 Data Privacy</div>
+            <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Complaints are strictly accessible only by the student who filed them and authorized deans.</p>
+          </div>
+
+          <div style="background: #ffffff; padding: 18px; border-radius: 8px; border: 1px solid #e2e8f0;">
+            <div style="font-size: 1.1rem; font-weight: 700; color: #1e3a8a; margin-bottom: 6px;">📝 Direct Remarks</div>
+            <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Receive written action notes and work order updates directly from department heads.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Extended Section: FAQ -->
+  <section class="landing-section">
+    <div class="container">
+      <h2 class="landing-section-title">
+        Frequently Asked Questions
+      </h2>
+
+      <div class="faq-grid">
+        <div class="faq-card">
+          <div class="faq-q"><span>❓</span> How do I track my complaint?</div>
+          <div class="faq-a">Log in to your student account, go to "My Complaints", and click "View" on any ticket to see the real-time progress timeline and admin remarks.</div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q"><span>❓</span> Can other students see my complaints?</div>
+          <div class="faq-a">No. The system enforces strict backend authorization. Each student can only view, search, and track their own submitted grievances.</div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q"><span>❓</span> How do I register a new account?</div>
+          <div class="faq-a">Click the "Register" button in the top navigation or on the hero section. Enter your name, college email, and password to create an account immediately.</div>
+        </div>
+
+        <div class="faq-card">
+          <div class="faq-q"><span>❓</span> What should I do for urgent emergencies?</div>
+          <div class="faq-a">When filing your complaint, set the Priority Level to "Urgent". Urgent tickets are highlighted with high priority on the admin dashboard.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Extended Section: Contact & Helpdesk (id="contact") -->
+  <section id="contact" class="landing-section landing-section-alt">
+    <div class="container">
+      <div style="max-width: 780px; margin: 0 auto; text-align: center;">
+        <h2 class="landing-section-title" style="margin-bottom: 12px;">
+          Contact Campus Helpdesk
+        </h2>
+        <p style="color: var(--text-muted); margin-bottom: 28px; font-size: 0.95rem;">
+          Have questions or need emergency assistance? Reach out to the student grievance cell directly.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; text-align: center;">
+          <div style="background: #ffffff; padding: 22px; border-radius: 10px; border: 1px solid #e2e8f0;">
+            <div style="font-size: 24px; margin-bottom: 6px;">📍</div>
+            <strong style="color: #0f172a; display: block; margin-bottom: 4px;">Office Location</strong>
+            <span style="font-size: 0.88rem; color: #64748b;">Administrative Block, Room 102, Ground Floor</span>
+          </div>
+
+          <div style="background: #ffffff; padding: 22px; border-radius: 10px; border: 1px solid #e2e8f0;">
+            <div style="font-size: 24px; margin-bottom: 6px;">✉️</div>
+            <strong style="color: #0f172a; display: block; margin-bottom: 4px;">Support Email</strong>
+            <span style="font-size: 0.88rem; color: #64748b;">grievance@college.edu</span>
+          </div>
+
+          <div style="background: #ffffff; padding: 22px; border-radius: 10px; border: 1px solid #e2e8f0;">
+            <div style="font-size: 24px; margin-bottom: 6px;">📞</div>
+            <strong style="color: #0f172a; display: block; margin-bottom: 4px;">Helpline Hours</strong>
+            <span style="font-size: 0.88rem; color: #64748b;">Mon &ndash; Fri: 9:00 AM &ndash; 5:00 PM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dark Footer (Matching Screenshot) -->
+  <footer class="landing-footer">
+    <div class="container">
+      <p>&copy; 2026 College Complaint System | Team Shadow Coder</p>
+      <div class="landing-footer-links">
+        <a href="index.html">Home</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="login.html">Login</a>
+        <a href="login.html?tab=register">Register</a>
+        <a href="dashboard.html">Student Portal</a>
+        <a href="admin.html">Admin Portal</a>
+      </div>
     </div>
   </footer>
 

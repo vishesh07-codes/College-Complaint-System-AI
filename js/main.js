@@ -1,66 +1,64 @@
 /**
  * js/main.js
  * College Complaint Management System
- * Global authentication checks, role-based page guards, navigation,
- * toast alerts, and UI helper utilities.
+ * Global session authentication checks, server-side auth verification,
+ * navigation, toast alerts, and UI helper utilities.
  */
 
-const AUTH_STORAGE_KEY = 'college_auth_user';
-
-// Predefined demo accounts
-const DEMO_ACCOUNTS = {
-  student: {
-    email: 'student@college.com',
-    password: '12345',
-    name: 'Vishesh Singhal',
-    role: 'student'
-  },
-  admin: {
-    email: 'admin@college.com',
-    password: 'admin123',
-    name: 'Dr. R. K. Verma (Dean)',
-    role: 'admin'
-  }
-};
+// In-memory active user session cached from /api/auth/me
+let activeUser = null;
 
 /**
- * Get currently authenticated user from localStorage.
- * @returns {Object|null} { email, name, role }
+ * Fetch authenticated user from backend session.
+ * @returns {Promise<Object|null>} { id, email, name, role }
+ */
+async function fetchCurrentUser() {
+  try {
+    const res = await fetch('/api/auth/me', {
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      activeUser = data.user;
+      return activeUser;
+    }
+  } catch (err) {
+    console.error('Error verifying user session:', err);
+  }
+  activeUser = null;
+  return null;
+}
+
+/**
+ * Synchronously get in-memory cached user (if already fetched).
+ * @returns {Object|null}
  */
 function getCurrentUser() {
+  return activeUser;
+}
+
+/**
+ * Log out active user from Flask session and redirect to login page.
+ */
+async function logout() {
   try {
-    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
+    await fetch('/api/auth/logout', { method: 'POST' });
   } catch (e) {
-    return null;
+    console.error('Logout error:', e);
   }
-}
-
-/**
- * Save user authentication session to localStorage.
- * @param {Object} user
- */
-function setCurrentUser(user) {
-  localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
-}
-
-/**
- * Log out active user and redirect to login page.
- */
-function logout() {
-  localStorage.removeItem(AUTH_STORAGE_KEY);
+  activeUser = null;
   window.location.href = 'login.html';
 }
 
 /**
- * Enforce role protection on sensitive pages.
+ * Enforce role protection on sensitive pages via Flask backend session.
  */
-function enforceAuthGuard() {
+async function enforceAuthGuard() {
   const path = (window.location.pathname || '').replace(/\\/g, '/');
   const page = path.substring(path.lastIndexOf('/') + 1).toLowerCase() || 'index.html';
-  const user = getCurrentUser();
 
-  // Pages that require being logged in as student or admin
+  const user = await fetchCurrentUser();
+
   const protectedStudentPages = ['dashboard.html', 'submit.html', 'complaints.html', 'complaint-details.html'];
   const adminPages = ['admin.html'];
 
@@ -70,7 +68,6 @@ function enforceAuthGuard() {
       return;
     }
     if (user.role !== 'admin') {
-      // Students attempting to access admin page get routed to their student dashboard
       alert('Access Denied: You must be an Administrator to view this page.');
       window.location.href = 'dashboard.html';
       return;
@@ -89,10 +86,13 @@ function enforceAuthGuard() {
       }
     }
   }
+
+  // Once auth is verified, update the navbar UI
+  setupNavbar();
 }
 
 /**
- * Setup mobile navbar toggle and active links.
+ * Setup mobile navbar toggle, user badge, and active links.
  */
 function setupNavbar() {
   const user = getCurrentUser();
@@ -105,9 +105,9 @@ function setupNavbar() {
 
   // Mobile menu toggle
   if (menuToggle && navLinks) {
-    menuToggle.addEventListener('click', () => {
+    menuToggle.onclick = () => {
       navLinks.classList.toggle('nav-open');
-    });
+    };
   }
 
   // Display user information in navbar if container exists
@@ -138,12 +138,12 @@ function setupNavbar() {
   if (logoutBtn) {
     if (user) {
       logoutBtn.style.display = 'inline-flex';
-      logoutBtn.addEventListener('click', (e) => {
+      logoutBtn.onclick = (e) => {
         e.preventDefault();
         if (confirm('Are you sure you want to log out?')) {
           logout();
         }
-      });
+      };
     } else {
       logoutBtn.style.display = 'none';
     }
@@ -222,7 +222,7 @@ function escapeHtml(str) {
 /**
  * Format ISO date string into readable user format.
  * @param {string} isoString
- * @returns {string} e.g. "Aug 31, 2026 at 2:15 PM"
+ * @returns {string} e.g. "Aug 31, 2026, 02:15 PM"
  */
 function formatDate(isoString) {
   if (!isoString) return '—';
@@ -266,8 +266,7 @@ function showToast(message, type = 'info') {
   }, 3000);
 }
 
-// Execute guard check and navbar setup on page load
+// Execute auth check and setup on page load
 document.addEventListener('DOMContentLoaded', () => {
   enforceAuthGuard();
-  setupNavbar();
 });

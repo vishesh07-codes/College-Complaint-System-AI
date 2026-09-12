@@ -1,11 +1,11 @@
 /**
  * js/submit.js
  * College Complaint Management System
- * Validates and handles complaint submissions with inline error messages.
+ * Validates and submits complaints asynchronously to the Flask & MySQL backend.
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const user = getCurrentUser();
+document.addEventListener('DOMContentLoaded', async () => {
+  const user = await fetchCurrentUser();
   const form = document.getElementById('complaint-form');
   const studentNameInput = document.getElementById('studentName');
   const studentEmailInput = document.getElementById('studentEmail');
@@ -22,9 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Validates fields and saves complaint to localStorage.
+ * Validates fields and sends new complaint to MySQL via Flask backend.
  */
-function handleComplaintSubmit(e) {
+async function handleComplaintSubmit(e) {
   e.preventDefault();
 
   // Clear previous errors
@@ -77,41 +77,53 @@ function handleComplaintSubmit(e) {
     return;
   }
 
-  // Get student details
-  const user = getCurrentUser() || {};
-  const studentName = (studentNameInput && studentNameInput.value.trim()) || user.name || 'Student';
-  const studentEmail = (studentEmailInput && studentEmailInput.value.trim()) || user.email || 'student@college.com';
+  const form = document.getElementById('complaint-form');
+  const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerText = 'Submitting...';
+  }
 
-  // Save new complaint
-  const newComplaint = addComplaint({
-    studentName,
-    studentEmail,
-    title,
-    category,
-    department,
-    location,
-    priority,
-    description
-  });
+  try {
+    // Send to Flask backend
+    const newComplaint = await addComplaint({
+      title,
+      category,
+      department,
+      location,
+      priority,
+      description
+    });
 
-  // Success handling
-  const successBox = document.getElementById('submit-success-banner');
-  const newIdSpan = document.getElementById('new-complaint-id');
-  const viewLink = document.getElementById('new-complaint-link');
+    // Success handling
+    const successBox = document.getElementById('submit-success-banner');
+    const newIdSpan = document.getElementById('new-complaint-id');
+    const viewLink = document.getElementById('new-complaint-link');
 
-  if (successBox && newIdSpan && viewLink) {
-    newIdSpan.innerText = newComplaint.id;
-    viewLink.href = `complaint-details.html?id=${encodeURIComponent(newComplaint.id)}`;
-    successBox.style.display = 'block';
-    form.reset();
-    if (studentNameInput) studentNameInput.value = studentName;
-    if (studentEmailInput) studentEmailInput.value = studentEmail;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  } else {
-    showToast(`Complaint ${newComplaint.id} submitted successfully!`, 'success');
-    setTimeout(() => {
-      window.location.href = `complaint-details.html?id=${encodeURIComponent(newComplaint.id)}`;
-    }, 800);
+    if (successBox && newIdSpan && viewLink) {
+      newIdSpan.innerText = newComplaint.id;
+      viewLink.href = `complaint-details.html?id=${encodeURIComponent(newComplaint.id)}`;
+      successBox.style.display = 'block';
+      form.reset();
+
+      const user = getCurrentUser();
+      if (studentNameInput && user) studentNameInput.value = user.name || '';
+      if (studentEmailInput && user) studentEmailInput.value = user.email || '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      showToast(`Complaint ${newComplaint.id} submitted successfully!`, 'success');
+      setTimeout(() => {
+        window.location.href = `complaint-details.html?id=${encodeURIComponent(newComplaint.id)}`;
+      }, 800);
+    }
+  } catch (err) {
+    console.error('Submission error:', err);
+    showToast(err.message || 'Failed to submit complaint. Please try again.', 'error');
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerText = 'Submit Grievance →';
+    }
   }
 }
 

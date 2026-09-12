@@ -1,29 +1,18 @@
 /**
  * js/complaints.js
  * College Complaint Management System
- * Powers the student's My Complaints page: search, multi-filter, and dynamic rendering.
+ * Powers the student's My Complaints page: live search, multi-filter, and dynamic rendering
+ * querying the Flask & MySQL backend.
  */
 
-let studentComplaints = [];
-
-document.addEventListener('DOMContentLoaded', () => {
-  const user = getCurrentUser();
+document.addEventListener('DOMContentLoaded', async () => {
+  const user = await fetchCurrentUser();
   if (!user) return;
 
-  loadStudentComplaints();
   populateCategoryFilter();
   setupFilterListeners();
-  renderComplaintsTable();
+  await loadAndRenderComplaints();
 });
-
-/**
- * Fetch complaints belonging to current student.
- */
-function loadStudentComplaints() {
-  const user = getCurrentUser();
-  const all = getComplaints();
-  studentComplaints = all.filter(c => c.studentEmail.toLowerCase() === user.email.toLowerCase());
-}
 
 /**
  * Dynamically populate category dropdown options.
@@ -50,61 +39,51 @@ function setupFilterListeners() {
   const prioritySelect = document.getElementById('filter-priority');
   const resetBtn = document.getElementById('btn-reset-filters');
 
-  if (searchInput) searchInput.addEventListener('input', renderComplaintsTable);
-  if (categorySelect) categorySelect.addEventListener('change', renderComplaintsTable);
-  if (statusSelect) statusSelect.addEventListener('change', renderComplaintsTable);
-  if (prioritySelect) prioritySelect.addEventListener('change', renderComplaintsTable);
+  let debounceTimer = null;
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(loadAndRenderComplaints, 250);
+    });
+  }
+
+  if (categorySelect) categorySelect.addEventListener('change', loadAndRenderComplaints);
+  if (statusSelect) statusSelect.addEventListener('change', loadAndRenderComplaints);
+  if (prioritySelect) prioritySelect.addEventListener('change', loadAndRenderComplaints);
 
   if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
+    resetBtn.addEventListener('click', async () => {
       if (searchInput) searchInput.value = '';
       if (categorySelect) categorySelect.value = '';
       if (statusSelect) statusSelect.value = '';
       if (prioritySelect) prioritySelect.value = '';
-      renderComplaintsTable();
+      await loadAndRenderComplaints();
     });
   }
 }
 
 /**
- * Filter and render the complaints based on active filter settings.
+ * Filter and render complaints from the backend.
  */
-function renderComplaintsTable() {
+async function loadAndRenderComplaints() {
   const searchInput = document.getElementById('search-input');
   const categorySelect = document.getElementById('filter-category');
   const statusSelect = document.getElementById('filter-status');
   const prioritySelect = document.getElementById('filter-priority');
 
-  const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
-  const selectedCat = categorySelect ? categorySelect.value : '';
-  const selectedStatus = statusSelect ? statusSelect.value : '';
-  const selectedPriority = prioritySelect ? prioritySelect.value : '';
+  const filters = {
+    search: searchInput ? searchInput.value.trim() : '',
+    category: categorySelect ? categorySelect.value : '',
+    status: statusSelect ? statusSelect.value : '',
+    priority: prioritySelect ? prioritySelect.value : ''
+  };
 
-  // Filter complaints
-  const filtered = studentComplaints.filter(c => {
-    // Search query matches ID, Title, Location or Description
-    const matchesQuery = !query || 
-      c.id.toLowerCase().includes(query) ||
-      c.title.toLowerCase().includes(query) ||
-      (c.location && c.location.toLowerCase().includes(query)) ||
-      c.description.toLowerCase().includes(query);
-
-    // Category filter
-    const matchesCat = !selectedCat || c.category === selectedCat;
-
-    // Status filter
-    const matchesStatus = !selectedStatus || c.status === selectedStatus;
-
-    // Priority filter
-    const matchesPriority = !selectedPriority || c.priority === selectedPriority;
-
-    return matchesQuery && matchesCat && matchesStatus && matchesPriority;
-  });
+  const complaints = await getComplaints(filters);
 
   // Update counts
   const countElem = document.getElementById('complaint-count-badge');
   if (countElem) {
-    countElem.innerText = `Showing ${filtered.length} of ${studentComplaints.length}`;
+    countElem.innerText = `Showing ${complaints.length} tickets`;
   }
 
   // Render table rows
@@ -113,7 +92,7 @@ function renderComplaintsTable() {
 
   if (!tableBody) return;
 
-  if (filtered.length === 0) {
+  if (complaints.length === 0) {
     tableBody.innerHTML = '';
     if (emptyState) emptyState.style.display = 'block';
     return;
@@ -121,7 +100,7 @@ function renderComplaintsTable() {
 
   if (emptyState) emptyState.style.display = 'none';
 
-  tableBody.innerHTML = filtered.map(c => `
+  tableBody.innerHTML = complaints.map(c => `
     <tr>
       <td><span class="table-code">${escapeHtml(c.id)}</span></td>
       <td>
