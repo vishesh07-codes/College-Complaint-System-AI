@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tabRegister.addEventListener('click', () => {
       clearAlerts();
       tabRegister.style.background = '#ffffff';
-      tabRegister.style.color = '#0d9488';
+      tabRegister.style.color = 'var(--primary-800)';
       tabRegister.style.fontWeight = '700';
       tabRegister.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
 
