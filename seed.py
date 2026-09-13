@@ -14,11 +14,11 @@ from werkzeug.security import generate_password_hash
 # Load environment variables
 load_dotenv()
 
-DB_HOST = os.getenv('DB_HOST', 'localhost')
-DB_PORT = int(os.getenv('DB_PORT', '3306'))
-DB_USER = os.getenv('DB_USER', 'root')
-DB_PASSWORD = os.getenv('DB_PASSWORD', '')
-DB_NAME = os.getenv('DB_NAME', 'college_complaints')
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_PORT = int(os.getenv("DB_PORT", "3306"))
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "")
+DB_NAME = os.getenv("DB_NAME", "college_complaints")
 
 
 def get_server_connection():
@@ -29,16 +29,20 @@ def get_server_connection():
             port=DB_PORT,
             user=DB_USER,
             password=DB_PASSWORD,
-            charset='utf8mb4',
-            cursorclass=pymysql.cursors.DictCursor
+            charset="utf8mb4",
+            cursorclass=pymysql.cursors.DictCursor,
         )
         return conn
     except Exception as e:
-        print(f"\n[FATAL ERROR] Failed to connect to MySQL server at {DB_HOST}:{DB_PORT}.")
+        print(
+            f"\n[FATAL ERROR] Failed to connect to MySQL server at {DB_HOST}:{DB_PORT}."
+        )
         print(f"Error details: {e}")
         print("\nPlease ensure that:")
         print(" 1. MySQL Server is installed and actively running.")
-        print(" 2. The credentials in .env (DB_HOST, DB_PORT, DB_USER, DB_PASSWORD) are correct.\n")
+        print(
+            " 2. The credentials in .env (DB_HOST, DB_PORT, DB_USER, DB_PASSWORD) are correct.\n"
+        )
         sys.exit(1)
 
 
@@ -51,12 +55,14 @@ def get_db_connection():
             user=DB_USER,
             password=DB_PASSWORD,
             database=DB_NAME,
-            charset='utf8mb4',
-            cursorclass=pymysql.cursors.DictCursor
+            charset="utf8mb4",
+            cursorclass=pymysql.cursors.DictCursor,
         )
         return conn
     except Exception as e:
-        print(f"\n[FATAL ERROR] Failed to connect to database '{DB_NAME}' on MySQL server.")
+        print(
+            f"\n[FATAL ERROR] Failed to connect to database '{DB_NAME}' on MySQL server."
+        )
         print(f"Error details: {e}")
         sys.exit(1)
 
@@ -67,17 +73,17 @@ def init_database():
     conn = get_server_connection()
     cursor = conn.cursor()
 
-    schema_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'schema.sql')
+    schema_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "schema.sql")
     if not os.path.exists(schema_file):
         print(f"[ERROR] schema.sql not found at {schema_file}")
         sys.exit(1)
 
     print(f"[*] Executing {schema_file}...")
-    with open(schema_file, 'r', encoding='utf-8') as f:
+    with open(schema_file, "r", encoding="utf-8") as f:
         sql_commands = f.read()
 
     # Split by statements
-    for statement in sql_commands.split(';'):
+    for statement in sql_commands.split(";"):
         stmt = statement.strip()
         if stmt:
             cursor.execute(stmt)
@@ -99,32 +105,32 @@ def seed_data():
             "name": "Vishesh Singhal",
             "email": "student@college.com",
             "password": generate_password_hash("12345"),
-            "role": "student"
+            "role": "student",
         },
         {
-            "name": "Dr. R. K. Verma (Dean)",
+            "name": "Dr. H.G. Garg (Dean)",
             "email": "admin@college.com",
             "password": generate_password_hash("admin123"),
-            "role": "admin"
+            "role": "admin",
         },
         {
             "name": "Priya Patel",
             "email": "priya.patel@college.com",
             "password": generate_password_hash("student123"),
-            "role": "student"
+            "role": "student",
         },
         {
             "name": "Rohan Verma",
             "email": "rohan.verma@college.com",
             "password": generate_password_hash("student123"),
-            "role": "student"
+            "role": "student",
         },
         {
             "name": "Ananya Gupta",
             "email": "ananya.gupta@college.com",
             "password": generate_password_hash("student123"),
-            "role": "student"
-        }
+            "role": "student",
+        },
     ]
 
     user_id_map = {}
@@ -133,10 +139,15 @@ def seed_data():
         existing = cursor.fetchone()
         if existing:
             user_id_map[u["email"]] = existing["id"]
+            # Yeh line add karein taaki existing user ka naam update ho sake:
+            cursor.execute(
+                "UPDATE users SET name = %s WHERE email = %s", (u["name"], u["email"])
+            )
+            print(f"  * Updated user: {u['email']} -> {u['name']}")
         else:
             cursor.execute(
                 "INSERT INTO users (name, email, password, role) VALUES (%s, %s, %s, %s)",
-                (u["name"], u["email"], u["password"], u["role"])
+                (u["name"], u["email"], u["password"], u["role"]),
             )
             user_id_map[u["email"]] = cursor.lastrowid
             print(f"  + Created user: {u['email']} (role: {u['role']})")
@@ -157,7 +168,7 @@ def seed_data():
             "description": "The Wi-Fi access point on the third floor of Hostel Block B disconnects every 10 minutes. Students are unable to access online study materials and submission portals.",
             "admin_response": "",
             "created_at": "2026-08-30 10:30:00",
-            "updated_at": "2026-08-30 10:30:00"
+            "updated_at": "2026-08-30 10:30:00",
         },
         {
             "complaint_id": "CMP-1002",
@@ -171,7 +182,7 @@ def seed_data():
             "description": "The multimedia projector in Hall 304 has a burnt out bulb. Morning lectures for semester 5 students are facing disruptions due to lack of presentation slides.",
             "admin_response": "Work order #ENG-489 assigned to audio-visual maintenance team. Bulb replacement scheduled for today afternoon.",
             "created_at": "2026-08-29 14:15:00",
-            "updated_at": "2026-08-31 09:45:00"
+            "updated_at": "2026-08-31 09:45:00",
         },
         {
             "complaint_id": "CMP-1003",
@@ -185,7 +196,7 @@ def seed_data():
             "description": "The RO drinking water dispenser tap is loose and leaking drinking water constantly across the floor, making the tile floor slippery and wasting purified water.",
             "admin_response": "Plumber visited on Aug 30 and installed a brand-new valve faucet. Drain line inspected and cleared.",
             "created_at": "2026-08-28 09:00:00",
-            "updated_at": "2026-08-30 16:00:00"
+            "updated_at": "2026-08-30 16:00:00",
         },
         {
             "complaint_id": "CMP-1004",
@@ -199,7 +210,7 @@ def seed_data():
             "description": "Central air-conditioning unit 2 in the quiet study section is blowing warm air. High humidity and heat make it impossible to sit and study for competitive exams.",
             "admin_response": "HVAC technician inspected the compressor. Refrigerant gas refill ordered from vendor. Will be functional within 24 hours.",
             "created_at": "2026-08-31 11:20:00",
-            "updated_at": "2026-09-01 12:10:00"
+            "updated_at": "2026-09-01 12:10:00",
         },
         {
             "complaint_id": "CMP-1005",
@@ -213,25 +224,41 @@ def seed_data():
             "description": "Bus #12 driver consistently starts late from the depot, resulting in 40+ students reaching morning 9:00 AM labs late and receiving absence marks.",
             "admin_response": "",
             "created_at": "2026-09-01 18:40:00",
-            "updated_at": "2026-09-01 18:40:00"
-        }
+            "updated_at": "2026-09-01 18:40:00",
+        },
     ]
 
     for c in seed_complaints:
-        cursor.execute("SELECT id FROM complaints WHERE complaint_id = %s", (c["complaint_id"],))
+        cursor.execute(
+            "SELECT id FROM complaints WHERE complaint_id = %s", (c["complaint_id"],)
+        )
         if not cursor.fetchone():
             user_id = user_id_map.get(c["user_email"])
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO complaints (
                     complaint_id, user_id, title, category, department, location,
                     description, priority, status, admin_response, created_at, updated_at
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """, (
-                c["complaint_id"], user_id, c["title"], c["category"], c["department"],
-                c["location"], c["description"], c["priority"], c["status"],
-                c["admin_response"], c["created_at"], c["updated_at"]
-            ))
-            print(f"  + Seeded complaint: {c['complaint_id']} - {c['title']} (user_id: {user_id})")
+            """,
+                (
+                    c["complaint_id"],
+                    user_id,
+                    c["title"],
+                    c["category"],
+                    c["department"],
+                    c["location"],
+                    c["description"],
+                    c["priority"],
+                    c["status"],
+                    c["admin_response"],
+                    c["created_at"],
+                    c["updated_at"],
+                ),
+            )
+            print(
+                f"  + Seeded complaint: {c['complaint_id']} - {c['title']} (user_id: {user_id})"
+            )
 
     conn.commit()
     cursor.close()
@@ -239,6 +266,6 @@ def seed_data():
     print("[SUCCESS] Database seeding completed successfully!\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     init_database()
     seed_data()
