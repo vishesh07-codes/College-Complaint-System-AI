@@ -44,7 +44,7 @@ def create_word_document(filename):
     # Title
     p_title = doc.add_paragraph()
     p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    run_title = p_title.add_run("CampusVoice")
+    run_title = p_title.add_run("Campus Voice")
     run_title.font.name = "Arial"
     run_title.font.size = Pt(26)
     run_title.font.bold = True
@@ -52,7 +52,7 @@ def create_word_document(filename):
 
     p_sub = doc.add_paragraph()
     p_sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    run_sub = p_sub.add_run("College Grievance Management System\nComplete Project Architecture, Team Division & Viva Guide")
+    run_sub = p_sub.add_run("A College Complaint Management System\nComplete Project Architecture, Team Division & Viva Guide")
     run_sub.font.name = "Arial"
     run_sub.font.size = Pt(15)
     run_sub.font.bold = True

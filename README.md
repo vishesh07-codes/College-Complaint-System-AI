@@ -1,4 +1,4 @@
-# 🎓 CampusVoice — College Grievance & Complaint Management System
+# 🎓 Campus Voice — A College Complaint Management System
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-3.1.3-black.svg?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
@@ -6,7 +6,7 @@
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-yellow.svg?logo=javascript&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![License](https://img.shields.io/badge/License-Academic%20%2F%20Open-green.svg)](#license)
 
-**CampusVoice** is a modern, full-stack, institutional-grade web application engineered to digitize, streamline, and govern the grievance redressal lifecycle across college campuses. It completely replaces cumbersome manual paper complaints with a transparent, auditable, role-based digital portal for students, faculty, and campus administrators.
+**Campus Voice** is a modern, full-stack, institutional-grade web application engineered to digitize, streamline, and govern the grievance redressal lifecycle across college campuses. It completely replaces cumbersome manual paper complaints with a transparent, auditable, role-based digital portal for students, faculty, and campus administrators.
 
 ---
 

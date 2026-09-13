@@ -1,7 +1,4 @@
-import os
-import subprocess
-
-html_content = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -421,29 +418,3 @@ html_content = """<!DOCTYPE html>
 
 </body>
 </html>
-"""
-
-with open("CampusVoice_Project_Presentation_and_Viva_Guide.html", "w", encoding="utf-8") as f:
-    f.write(html_content)
-
-print("[SUCCESS] HTML file written.")
-
-# Convert HTML to PDF using Microsoft Edge headless
-edge_path = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
-html_abs = os.path.abspath("CampusVoice_Project_Presentation_and_Viva_Guide.html")
-pdf_abs = os.path.abspath("CampusVoice_Project_Presentation_and_Viva_Guide.pdf")
-
-cmd = [
-    edge_path,
-    "--headless",
-    "--disable-gpu",
-    "--run-all-compositor-stages-before-draw",
-    f"--print-to-pdf={pdf_abs}",
-    f"file:///{html_abs.replace(os.sep, '/')}"
-]
-
-try:
-    res = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    print(f"[SUCCESS] PDF generated at: {pdf_abs}")
-except Exception as e:
-    print(f"[ERROR] Failed to run Edge: {e}")

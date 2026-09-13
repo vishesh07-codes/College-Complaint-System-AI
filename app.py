@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 app.py
-College Complaint Management System — Flask Backend
+Campus Voice — A College Complaint Management System (Flask Backend)
 Full-stack REST API with MySQL persistence, Flask session authentication,
 strict role-based authorization, and static/HTML routing.
 """
@@ -660,7 +660,7 @@ def serve_static_or_page(filename):
 
 if __name__ == '__main__':
     print("=" * 60)
-    print(" College Complaint Management System — Flask Backend")
+    print(" Campus Voice — A College Complaint Management System")
     print(" Database: MySQL only (Strict Mode)")
     print("=" * 60)
     check_mysql_connection_on_startup()
