@@ -34,12 +34,12 @@
         </div>
 
         <!-- Tab Switcher: Sign In vs Register -->
-        <div style="display: flex; background: #f1f5f9; padding: 4px; border-radius: var(--radius-sm); margin: 18px 0 14px 0;">
-          <button type="button" id="tab-btn-login" class="btn btn-sm btn-block" style="background: #ffffff; color: var(--primary-800); box-shadow: var(--shadow-sm); border: none; font-weight: 700; border-radius: 4px;">
-            Sign In
+        <div style="display: flex; background: #e2e8f0; padding: 5px; border-radius: 8px; margin: 18px 0 16px 0; border: 1px solid #cbd5e1;">
+          <button type="button" id="tab-btn-login" class="btn btn-sm btn-block" style="background: #ffffff; color: var(--primary-800); box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: none; font-weight: 700; border-radius: 6px; padding: 10px; font-size: 0.95rem; cursor: pointer;">
+            🔑 Sign In
           </button>
-          <button type="button" id="tab-btn-register" class="btn btn-sm btn-block" style="background: transparent; color: var(--text-muted); border: none; font-weight: 600; border-radius: 4px;">
-            Create Account
+          <button type="button" id="tab-btn-register" class="btn btn-sm btn-block" style="background: transparent; color: #475569; border: none; font-weight: 600; border-radius: 6px; padding: 10px; font-size: 0.95rem; cursor: pointer;">
+            ✨ Create Account
           </button>
         </div>
 
@@ -75,9 +75,16 @@
             >
           </div>
 
-          <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 10px;">
+          <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 12px;">
             Sign In &rarr;
           </button>
+
+          <p style="text-align: center; margin-top: 16px; margin-bottom: 0; font-size: 0.9rem; color: var(--text-muted);">
+            Don't have an account? 
+            <a href="javascript:void(0)" id="link-to-register" style="color: var(--primary-600); font-weight: 700; text-decoration: underline;">
+              Create an account
+            </a>
+          </p>
         </form>
 
         <!-- 2. Register Form -->
@@ -118,6 +125,16 @@
             >
           </div>
 
+          <button type="submit" class="btn btn-primary btn-block" style="padding: 12px; font-size: 1rem; margin-top: 15px; background: #0d9488; border-color: #0d9488;">
+            Create Student Account &rarr;
+          </button>
+
+          <p style="text-align: center; margin-top: 16px; margin-bottom: 0; font-size: 0.9rem; color: var(--text-muted);">
+            Already have an account? 
+            <a href="javascript:void(0)" id="link-to-login" style="color: var(--primary-600); font-weight: 700; text-decoration: underline;">
+              Sign in here
+            </a>
+          </p>
         </form>
 
       </div>

@@ -35,10 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
       tabLogin.style.background = '#ffffff';
       tabLogin.style.color = 'var(--primary-800)';
       tabLogin.style.fontWeight = '700';
-      tabLogin.style.boxShadow = 'var(--shadow-sm)';
+      tabLogin.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
 
       tabRegister.style.background = 'transparent';
-      tabRegister.style.color = 'var(--text-muted)';
+      tabRegister.style.color = '#475569';
       tabRegister.style.fontWeight = '600';
       tabRegister.style.boxShadow = 'none';
 
@@ -51,12 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
     tabRegister.addEventListener('click', () => {
       clearAlerts();
       tabRegister.style.background = '#ffffff';
-      tabRegister.style.color = 'var(--primary-800)';
+      tabRegister.style.color = '#0d9488';
       tabRegister.style.fontWeight = '700';
-      tabRegister.style.boxShadow = 'var(--shadow-sm)';
+      tabRegister.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
 
       tabLogin.style.background = 'transparent';
-      tabLogin.style.color = 'var(--text-muted)';
+      tabLogin.style.color = '#475569';
       tabLogin.style.fontWeight = '600';
       tabLogin.style.boxShadow = 'none';
 
@@ -70,6 +70,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('tab') === 'register' && tabRegister) {
       tabRegister.click();
+    }
+
+    // Text links switching tabs
+    const linkToRegister = document.getElementById('link-to-register');
+    const linkToLogin = document.getElementById('link-to-login');
+    if (linkToRegister) {
+      linkToRegister.addEventListener('click', (e) => {
+        e.preventDefault();
+        tabRegister.click();
+      });
+    }
+    if (linkToLogin) {
+      linkToLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        tabLogin.click();
+      });
     }
   }
 
